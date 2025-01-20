@@ -4,7 +4,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('signIn');
 });
 
 Route::get('/sign-in', function () {
@@ -17,3 +17,7 @@ Route::post('/sign-up', [UserController::class, 'signUp'])->name('postSignUp');
 Route::get('/sign-up', function () {
     return view('authentication.sign_up');
 })->name('signUp');
+
+Route::get('/main', function () {
+    return view('welcome');
+})->name('main');

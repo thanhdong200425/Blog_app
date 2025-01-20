@@ -31,17 +31,6 @@
         <input type="password" placeholder="Confirm password" value="{{ old('confirmPassword') }}" name="confirmPassword"
             id="confirm-password" required autocomplete="off" />
     </div>
-
-    @if ($errors->any())
-        <div class="error">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <small id="password-error" style="display: none;">Password doesn't match</small>
     <div id="password-strength">
         <div class="strength-bar">

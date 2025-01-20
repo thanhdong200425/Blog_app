@@ -36,3 +36,7 @@
         </div>
     </div>
 @endsection
+
+@section('scripts')
+    @vite('resources/js/signIn.js')
+@endsection

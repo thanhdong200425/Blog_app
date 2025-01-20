@@ -26,6 +26,15 @@
                 @csrf
                 @section('input-field')
                 @show
+                @if ($errors->any())
+                    <div class="error">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="button-container">
                     <button type="submit" class="action-button">@yield('button-name')</button>
                 </div>
