@@ -161,6 +161,16 @@ body {
 .error {
     color: red;
     display: block !important;
+    margin-top: 1rem;
+}
+
+.error ul {
+    list-style: none;
+    font-size: 0.9rem;
+}
+
+.error ul li {
+    margin: 0.4rem 0;
 }
 
 #password-strength {
@@ -179,7 +189,7 @@ body {
 }
 
 .strength-bar {
-    height: 4px;
+    height: 6px;
     background-color: #e0e0e0;
     border-radius: 2px;
     margin-bottom: 0.5rem;
@@ -224,4 +234,15 @@ body {
 
 .hide {
     display: none;
+}
+
+.disabled-button {
+    cursor: not-allowed;
+    color: #ccc;
+    background-color: #e0e0e0;
+}
+
+.disabled-button:hover {
+    color: #ccc;
+    background-color: #e0e0e0;
 }

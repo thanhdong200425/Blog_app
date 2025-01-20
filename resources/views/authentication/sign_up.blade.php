@@ -8,35 +8,45 @@
 
 @section('form-route', route('signUp'))
 
-
 @section('input-field')
     <div class="input-field">
         <div class="icon-container">
             <img src="{{ asset('icons/person-icon.svg') }}" alt="Icon" />
         </div>
-        <input type="text" placeholder="Username" name="username" required autocomplete="off" />
+        <input type="text" placeholder="Username" name="username" value="{{ old('username') }}" required autocomplete="off" />
     </div>
 
     <div class="input-field" id="password-field">
         <div class="icon-container">
             <img src="{{ asset('icons/lock-icon.svg') }}" alt="Icon" />
         </div>
-        <input type="password" placeholder="Password" name="password" id="password" required autocomplete="off" />
+        <input type="password" placeholder="Password" value="{{ old('password') }}" name="password" id="password" required
+            autocomplete="off" />
     </div>
 
     <div class="input-field" id="confirm-password-field">
         <div class="icon-container">
             <img src="{{ asset('icons/lock-icon.svg') }}" alt="Icon" />
         </div>
-        <input type="password" placeholder="Confirm password" name="confirmPassword" id="confirm-password" required
-            autocomplete="off" />
+        <input type="password" placeholder="Confirm password" value="{{ old('confirmPassword') }}" name="confirmPassword"
+            id="confirm-password" required autocomplete="off" />
     </div>
+
+    @if ($errors->any())
+        <div class="error">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <small id="password-error" style="display: none;">Password doesn't match</small>
     <div id="password-strength">
         <div class="strength-bar">
             <div class="bar"></div>
         </div>
-        <small id="password-strength-indicator">Weak</small>
     </div>
 @endsection
 
