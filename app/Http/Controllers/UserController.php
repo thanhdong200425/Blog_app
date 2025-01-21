@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Session;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,15 +23,14 @@ class UserController extends Controller
         if ($validateResult instanceof RedirectResponse)
             return $validateResult;
 
-        $username = $validateResult['username'];
-        $password = $validateResult['password'];
+        $credentials = $request->only('username', 'password');
 
-        // Get user from username
-        $user = User::where('username', $username)->first();
+        // Get user by retrieve username
+        if (!Auth::attempt($credentials))
+            return redirect()->route('signIn')->withErrors(['error' => 'Your password is not correct']);
 
-        // Compare hashed_password with password from user input
-        if (!$user || !Hash::check($password, $user->hashed_password))
-            return redirect()->route('signIn')->withErrors(['error' => 'Username or password is incorrect'])->withInput();
+        // Regenerate sessionID after log-in
+        $request->session()->regenerate();
 
         return redirect()->route('main');
     }
@@ -56,6 +57,7 @@ class UserController extends Controller
             'username' => $username,
             'hashed_password' => Hash::make($password, ['rounds' => 12])
         ]);
+
         return redirect()->route('signIn');
     }
 

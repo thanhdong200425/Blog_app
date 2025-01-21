@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'date_of_birth' => fake()->date(),
-            'image_url' => fake()->imageUrl()
+            'image_url' => 'https://picsum.photos/id/' . fake()->numberBetween(1, 1000) . '/200/200'
         ];
     }
 
