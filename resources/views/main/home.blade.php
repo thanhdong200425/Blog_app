@@ -21,7 +21,7 @@
             <nav>
                 <ul>
                     <li><a href="{{ route('main') }}" class="active">Post</a></li>
-                    <li><a href="/ask">Ask</a></li>
+                    <li><a href="{{ route('ask') }}">Ask</a></li>
                     <li><a href="/discuss">Discuss</a></li>
                 </ul>
             </nav>
@@ -45,6 +45,8 @@
         @section('main-part')
         @show
     </main>
+
+    @yield('scripts')
 </body>
 
 </html>

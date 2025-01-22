@@ -1,0 +1,269 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap");
+
+@media print {
+    body {
+        margin: 0 !important;
+    }
+}
+
+.main-container {
+    font-family: "Lato";
+    width: fit-content;
+    margin: 200px auto;
+}
+
+.main-container.modern {
+    font-family: "Inter", sans-serif;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.editor-wrapper {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+}
+
+.ck-content {
+    font-family: "Inter", sans-serif;
+    line-height: 1.7;
+    word-break: break-word;
+    font-size: 1rem;
+}
+
+.editor-container_classic-editor .editor-container__editor {
+    min-width: 795px;
+    max-width: 795px;
+}
+
+.modern-editor .editor-container__editor {
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.editor-container_include-block-toolbar {
+    margin-left: 42px;
+}
+
+.ck.ck-editor__editable_inline {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+.ck.ck-toolbar {
+    border: none !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    padding: 0.5rem !important;
+}
+
+.ck.ck-button {
+    border-radius: 6px !important;
+    padding: 0.5rem !important;
+}
+
+.ck.ck-button:hover {
+    background: #e2e8f0 !important;
+}
+
+.ck-content h3.category {
+    font-family: "Oswald";
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+    letter-spacing: 10px;
+    margin: 0;
+    padding: 0;
+}
+
+.ck-content h2.document-title {
+    font-family: "Poppins", sans-serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.ck-content h3.document-subtitle {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.25rem;
+    color: #4a5568;
+    margin: 0.5rem 0 1.5rem;
+    font-weight: bold;
+    padding: 0;
+}
+
+.ck-content p.info-box {
+    --background-size: 30px;
+    --background-color: #4299e1;
+    padding: 1.2em 2em;
+    border: 1px solid var(--background-color);
+    background: linear-gradient(135deg, var(--background-color) 0%, var(--background-color) var(--background-size), transparent var(--background-size)), linear-gradient(135deg, transparent calc(100% - var(--background-size)), var(--background-color) calc(100% - var(--background-size)), var(--background-color));
+    border-radius: 8px;
+    margin: 1.5em 2em;
+    box-shadow: 0 4px 6px rgba(66, 153, 225, 0.1);
+}
+
+.ck-content blockquote.side-quote {
+    font-family: "Poppins", sans-serif;
+    font-style: normal;
+    float: right;
+    width: 35%;
+    position: relative;
+    border: 0;
+    overflow: visible;
+    z-index: 1;
+    margin-left: 1em;
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #4299e1;
+}
+
+.ck-content blockquote.side-quote::before {
+    content: "“";
+    position: absolute;
+    top: -37px;
+    left: -10px;
+    display: block;
+    font-size: 200px;
+    color: #e7e7e7;
+    z-index: -1;
+    line-height: 1;
+}
+
+.ck-content blockquote.side-quote p {
+    font-size: 2em;
+    line-height: 1;
+}
+
+.ck-content blockquote.side-quote p:last-child:not(:first-child) {
+    font-size: 1.3em;
+    text-align: right;
+    color: #555;
+}
+
+.ck-content span.marker {
+    background: yellow;
+}
+
+.ck-content span.spoiler {
+    background: #000;
+    color: #000;
+}
+
+.ck-content span.spoiler:hover {
+    background: #000;
+    color: #fff;
+}
+
+.ck-content pre.fancy-code {
+    border: 0;
+    margin-left: 2em;
+    margin-right: 2em;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.ck-content pre.fancy-code::before {
+    content: "";
+    display: block;
+    height: 13px;
+    background: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NCAxMyI+CiAgPGNpcmNsZSBjeD0iNi41IiBjeT0iNi41IiByPSI2LjUiIGZpbGw9IiNGMzZCNUMiLz4KICA8Y2lyY2xlIGN4PSIyNi41IiBjeT0iNi41IiByPSI2LjUiIGZpbGw9IiNGOUJFNEQiLz4KICA8Y2lyY2xlIGN4PSI0Ny41IiBjeT0iNi41IiByPSI2LjUiIGZpbGw9IiM1NkM0NTMiLz4KPC9zdmc+Cg==);
+    margin-bottom: 8px;
+    background-repeat: no-repeat;
+}
+
+.ck-content pre.fancy-code-dark {
+    background: #272822;
+    color: #fff;
+    box-shadow: 5px 5px 0 #0000001f;
+}
+
+.ck-content pre.fancy-code-bright {
+    background: #dddfe0;
+    color: #000;
+    box-shadow: 5px 5px 0 #b3b3b3;
+}
+
+.editor_container__word-count .ck-word-count {
+    color: var(--ck-color-text);
+    display: flex;
+    height: 20px;
+    gap: var(--ck-spacing-small);
+    justify-content: flex-end;
+    font-size: var(--ck-font-size-base);
+    line-height: var(--ck-line-height-base);
+    font-family: var(--ck-font-face);
+    padding: var(--ck-spacing-small) var(--ck-spacing-standard);
+}
+
+.editor-container_include-word-count.editor-container_classic-editor .editor_container__word-count {
+    border: 1px solid var(--ck-color-base-border);
+    border-radius: var(--ck-border-radius);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: none;
+}
+
+.editor-container_include-word-count.editor-container_classic-editor .editor-container__editor .ck-editor .ck-editor__editable {
+    border-radius: 0;
+}
+
+.editor_container__word-count {
+    margin-top: 1rem;
+    padding: 0.75rem !important;
+    background: #f8fafc;
+    border-radius: 6px;
+}
+
+.submit-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submit-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #4299e1;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(66, 153, 225, 0.1);
+}
+
+.submit-button:hover {
+    background: #3182ce;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 8px rgba(66, 153, 225, 0.2);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(66, 153, 225, 0.1);
+}
+
+.submit-button svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+}
+
+.submit-button:hover svg {
+    transform: translateX(2px);
+}
