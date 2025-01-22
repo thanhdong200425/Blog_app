@@ -37,12 +37,12 @@
                     <div class="header">
                         <div class="author">
                             <div class="avatar">
-                                <img src="https://picsum.photos/200/300" alt="avatar image" />
+                                <img src="{{ $article->author->image_url }}" alt="avatar image" />
                             </div>
                             <div class="title">
                                 <div class="author-name">
-                                    <p>Nguyen Van Duong</p>
-                                    <span>@nguyen.van.duong</span>
+                                    <p>{{ $article->author->first_name }} {{ $article->author->last_name }}</p>
+                                    <span>@ {{ $article->author->username }}</span>
                                 </div>
                                 <div class="author-statistical">
                                     <span class="star">
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <div class="info">
-                            <p>Created at Jan 22nd, 2025 11:10 AM</p>
+                            <p>Created at {{ $article->created_at->format('M jS, Y h:i A') }}</p>
                             <div class="article-statistical">
                                 <span class="eye">
                                     <img src="{{ asset('icons/eye-icon.svg') }}" alt="read icon" />6.8K
@@ -75,62 +75,7 @@
                         </div>
                     </div>
                     <div class="content">
-                        <h1>Building Modern Web Applications with Laravel and Vue.js</h1>
-
-                        <p class="article-summary">
-                            Learn how to create powerful web applications by combining Laravel's robust backend with
-                            Vue.js's reactive frontend. This guide covers everything from setup to deployment.
-                        </p>
-
-                        <img src="https://picsum.photos/1000/400" alt="Cover image" class="cover-image" />
-
-                        <h2>Getting Started</h2>
-                        <p>
-                            Before we dive into the development process, make sure you have the following prerequisites
-                            installed on your system:
-                        </p>
-
-                        <ul>
-                            <li>PHP 8.1 or higher</li>
-                            <li>Composer</li>
-                            <li>Node.js and npm</li>
-                            <li>Git</li>
-                        </ul>
-
-                        <h2>Setting Up Laravel</h2>
-                        <p>
-                            First, let's create a new Laravel project using Composer. Open your terminal and run:
-                        </p>
-
-                        <div class="code-block">
-                            <div class="code-header">
-                                <span>Terminal</span>
-                                <button class="copy-btn">Copy</button>
-                            </div>
-                            <pre><code>composer create-project laravel/laravel example-app
-cd example-app
-php artisan serve</code></pre>
-                        </div>
-
-                        <h2>Adding Vue.js</h2>
-                        <p>
-                            Next, we'll integrate Vue.js into our Laravel application. This will give us the reactive
-                            frontend capabilities we need.
-                        </p>
-
-                        <div class="info-box">
-                            <img src="{{ asset('icons/info-icon.svg') }}" alt="Info icon" />
-                            <p>
-                                Make sure you're using Vue.js 3 for the latest features and best performance.
-                            </p>
-                        </div>
-
-                        <img src="https://picsum.photos/1000/500" alt="Architecture diagram" class="content-image" />
-
-                        <p>
-                            The image above shows the basic architecture of our application. Laravel handles the backend API
-                            and authentication, while Vue.js manages the frontend state and user interface.
-                        </p>
+                        {!! clean($article->content) !!}
                     </div>
                 </article>
             </div>

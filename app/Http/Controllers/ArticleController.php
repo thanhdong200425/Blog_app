@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
@@ -15,8 +13,9 @@ class ArticleController extends Controller
         return view('main.post.list-article', ['articles' => $articles, 'latestPosts' => $latestPosts]);
     }
 
-    public function show($id)
+    public function show($slug, $id)
     {
-        return view('main.post.article', ['id' => $id]);
+        $article = Article::with('author')->where('id', $id)->first();
+        return view('main.post.article', ['article' => $article]);
     }
 }

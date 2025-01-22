@@ -276,7 +276,8 @@
 }
 
 .content .cover-image,
-.content .content-image {
+.content .content-image,
+img {
     width: 100%;
     border-radius: 8px;
     margin: 2rem 0;

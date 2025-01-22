@@ -29,5 +29,5 @@ Route::middleware(RedirectIfLoggedIn::class)->group(function () {
 Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(function () {
     Route::get('/', [ArticleController::class, 'index'])->name('main');
 
-    Route::get('/article/{id}', [ArticleController::class, 'show'])->name('article');
+    Route::get('/article/{slug}-{id}', [ArticleController::class, 'show'])->where(['slug' => '[a-z0-9-]+', 'id' => '[0-9]+'])->name('article');
 });

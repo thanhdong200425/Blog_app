@@ -6,10 +6,12 @@
 @endsection
 
 @section('main-part')
+    @php use Illuminate\Support\Str; @endphp
     <div class="main-container">
         <div class="column left">
             @foreach ($articles as $article)
-                <div class="card">
+                <div class="card"
+                    onclick="window.location.href='{{ route('article', ['slug' => Str::slug($article->title), 'id' => $article->id]) }}'">
                     {{-- Avatar --}}
                     <div class="avatar">
                         <img src="{{ $article->author->image_url }}" />

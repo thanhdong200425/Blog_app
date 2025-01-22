@@ -20,7 +20,7 @@ class ArticleFactory extends Factory
         return [
             'user_id' => User::all()->random()->id,
             'title' => fake()->sentence(),
-            'content' => fake()->paragraph()
+            'content' => fake()->randomHtml()
         ];
     }
 }
