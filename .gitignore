@@ -21,3 +21,5 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/storage/logs
+/C:\Users\ASUS-PRO\OneDrive\PSCD\Training Projects\blog_app\storage\logs/laravel.log
