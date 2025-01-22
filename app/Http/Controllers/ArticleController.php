@@ -8,11 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
-    public function show()
+    public function index()
     {
         $articles = Article::with('author')->paginate(10);
         $latestPosts = Article::with('author')->orderBy('created_at', 'desc')->take(5)->get();
-        $user = Auth::user();
-        return view('main.post.list-post', ['articles' => $articles, 'latestPosts' => $latestPosts, 'avatarSrc' => $user->image_url]);
+        return view('main.post.list-article', ['articles' => $articles, 'latestPosts' => $latestPosts]);
+    }
+
+    public function show($id)
+    {
+        return view('main.post.article', ['id' => $id]);
     }
 }

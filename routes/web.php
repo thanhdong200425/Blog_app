@@ -25,4 +25,9 @@ Route::middleware(RedirectIfLoggedIn::class)->group(function () {
     Route::post('/sign-up', [UserController::class, 'signUp'])->name('postSignUp');
 });
 
-Route::get('/main', [ArticleController::class, 'show'])->name('main')->middleware(CheckAuthenticatedForUser::class);
+// Main routes
+Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(function () {
+    Route::get('/', [ArticleController::class, 'index'])->name('main');
+
+    Route::get('/article/{id}', [ArticleController::class, 'show'])->name('article');
+});

@@ -20,7 +20,7 @@
             </a>
             <nav>
                 <ul>
-                    <li><a href="/post" class="active">Post</a></li>
+                    <li><a href="{{ route('main') }}" class="active">Post</a></li>
                     <li><a href="/ask">Ask</a></li>
                     <li><a href="/discuss">Discuss</a></li>
                 </ul>
