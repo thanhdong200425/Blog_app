@@ -15,7 +15,7 @@
 <body>
     <header>
         <div class="navbar">
-            <a href="#" class="logo">
+            <a href="{{ route('main') }}" class="logo">
                 <img src="https://viblo.asia/logo_full.svg" alt="Logo">
             </a>
             <nav>

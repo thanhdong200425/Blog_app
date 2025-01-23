@@ -6,6 +6,22 @@
 @endsection
 
 @section('main-part')
+    <?php
+    $content = $article->content;
+    // Extract all headings (h1-h6) using regex
+    preg_match_all('/<h([1-6])>(.*?)<\/h[1-6]>/i', $content, $matches);
+    $headings = array_map(
+        function ($level, $text) {
+            return [
+                'level' => $level,
+                'text' => strip_tags($text),
+                'anchor' => \Illuminate\Support\Str::slug($text),
+            ];
+        },
+        $matches[1],
+        $matches[2],
+    );
+    ?>
     <div class="main-container">
         <div class="post-action-container">
             {{-- <div class="avatar-author">
@@ -75,7 +91,7 @@
                         </div>
                     </div>
                     <div class="content">
-                        {!! clean($article->content) !!}
+                        {!! \Illuminate\Support\Str::markdown($article->content) !!}
                     </div>
                 </article>
             </div>

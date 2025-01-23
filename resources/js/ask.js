@@ -215,6 +215,7 @@ const editorConfig = {
             },
         },
     },
+
     balloonToolbar: ["aiAssistant", "|", "bold", "italic", "|", "link", "insertImage", "|", "bulletedList", "numberedList"],
     blockToolbar: ["aiCommands", "aiAssistant", "|", "bold", "italic", "|", "link", "insertImage", "insertTable", "|", "bulletedList", "numberedList", "outdent", "indent"],
     cloudServices: {
@@ -407,6 +408,19 @@ const editorConfig = {
     table: {
         contentToolbar: ["tableColumn", "tableRow", "mergeTableCells", "tableProperties", "tableCellProperties"],
     },
+    mediaEmbed: {
+        previewsInData: true,
+        providers: [
+            {
+                name: "youtube",
+                url: [/^(?:m\.)?youtube\.com\/watch\?v=([\w-]+)/, /^(?:m\.)?youtube\.com\/v\/([\w-]+)/, /^youtube\.com\/embed\/([\w-]+)/, /^youtu\.be\/([\w-]+)/],
+                html: (match) => {
+                    const id = match[1];
+                    return '<div class="video-embed">' + '<iframe width="600" height="400" ' + `src="https://www.youtube.com/embed/${id}" ` + 'frameborder="0" allow="autoplay; encrypted-media" ' + "allowfullscreen></iframe>" + "</div>";
+                },
+            },
+        ],
+    },
     template: {
         definitions: [
             {
@@ -420,12 +434,12 @@ const editorConfig = {
 };
 
 configUpdateAlert(editorConfig);
-
+let newEditor;
 ClassicEditor.create(document.querySelector("#editor"), editorConfig).then((editor) => {
+    newEditor = editor;
     const wordCount = editor.plugins.get("WordCount");
     document.querySelector("#editor-word-count").appendChild(wordCount.wordCountContainer);
-
-    return editor;
+    validateFormBeforeSubmitting();
 });
 
 /**
@@ -469,3 +483,42 @@ function configUpdateAlert(config) {
         window.alert(["Please update the following values in your editor config", "to receive full access to Premium Features:", "", ...valuesToUpdate.map((value) => ` - ${value}`)].join("\n"));
     }
 }
+
+// Handle form submission
+const handleSubmission = () => {
+    document.querySelector("#post-form").addEventListener("submit", (e) => {
+        event.preventDefault();
+        // Create hidden input
+        const form = document.querySelector("#post-form"),
+            submitButton = document.querySelector("#submit-button");
+        const formContent = document.createElement("input");
+        formContent.type = "hidden";
+        formContent.name = "content";
+        formContent.value = newEditor.getData();
+        form.appendChild(formContent);
+        submitButton.classList.add("waiting");
+        setTimeout(() => form.submit(), 2000);
+    });
+};
+
+// Validate form before submitting
+const validateFormBeforeSubmitting = () => {
+    const formTitle = document.querySelector("#article-title");
+    const submitButton = document.querySelector("#submit-button");
+    let isEditorHasContent = false;
+
+    newEditor.model.document.on("change:data", () => {
+        isEditorHasContent = newEditor.getData().length > 0;
+        checkValidity();
+    });
+
+    const checkValidity = () => (submitButton.disabled = formTitle.value.length === 0 || !isEditorHasContent);
+
+    formTitle.addEventListener("input", checkValidity);
+    checkValidity();
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    handleSubmission();
+    validateFormBeforeSubmitting();
+});

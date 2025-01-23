@@ -7,6 +7,19 @@
 
 @section('main-part')
     @php use Illuminate\Support\Str; @endphp
+
+    @if (session('success'))
+        <div class="success-message">
+            <div class="success-content">
+                <svg viewBox="0 0 24 24" class="check-icon">
+                    <path fill="currentColor"
+                        d="M20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4C12.76,4 13.5,4.11 14.2,4.31L15.77,2.74C14.61,2.26 13.34,2 12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z" />
+                </svg>
+                <span>{{ session('success') }}</span>
+            </div>
+        </div>
+    @endif
+
     <div class="main-container">
         <div class="column left">
             @foreach ($articles as $article)
@@ -64,9 +77,10 @@
         </div>
         <div class="column right">
             <p>Newest questions <span></span></p>
-            @foreach ($latestPosts as $post)
-                <div class="sub-card">
-                    <h2>{{ $post->title }}</h2>
+            @foreach ($latestArticles as $article)
+                <div class="sub-card"
+                    onclick="window.location.href='{{ route('article', ['slug' => Str::slug($article->title), 'id' => $article->id]) }}'">
+                    <h2>{{ $article->title }}</h2>
                     <div class="bottom-content">
                         <span class="eye">
                             <img src="/icons/eye-icon.svg" />
@@ -85,7 +99,7 @@
                             <span>1</span>
                         </span>
                     </div>
-                    <span>{{ $post->author->username }}</span>
+                    <span>{{ $article->author->username }}</span>
                 </div>
             @endforeach
 

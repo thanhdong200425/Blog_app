@@ -32,4 +32,6 @@ Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(func
     Route::get('/article/{slug}-{id}', [ArticleController::class, 'show'])->where(['slug' => '[a-z0-9-]+', 'id' => '[0-9]+'])->name('article');
 
     Route::get('/ask', [ArticleController::class, 'showAskingPage'])->name('ask');
+
+    Route::post('/ask', [ArticleController::class, "create"])->name('submit-asking');
 });
