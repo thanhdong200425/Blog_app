@@ -25,7 +25,7 @@ Route::middleware(RedirectIfLoggedIn::class)->group(function () {
     Route::post('/sign-up', [UserController::class, 'signUp'])->name('postSignUp');
 });
 
-// Main routes
+// Article routes
 Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(function () {
     Route::get('/', [ArticleController::class, 'index'])->name('main');
 
@@ -35,3 +35,6 @@ Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(func
 
     Route::post('/ask', [ArticleController::class, "create"])->name('submit-asking');
 });
+
+// Logout route
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');

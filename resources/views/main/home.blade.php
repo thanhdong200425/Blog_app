@@ -19,10 +19,10 @@
                 <img src="https://viblo.asia/logo_full.svg" alt="Logo">
             </a>
             <nav>
-                <ul>
-                    <li><a href="{{ route('main') }}" class="active">Post</a></li>
-                    <li><a href="{{ route('ask') }}">Ask</a></li>
-                    <li><a href="/discuss">Discuss</a></li>
+                <ul class="nav-button">
+                    <li><a href="{{ route('main') }}" class="active" id="main">Post</a></li>
+                    <li><a href="{{ route('ask') }}" id="ask">Ask</a></li>
+                    <li><a href="/discuss" id="discuss">Discuss</a></li>
                 </ul>
             </nav>
             <div class="side-nav">
@@ -38,6 +38,23 @@
                 <a href="#" class="avatar-button">
                     <img src="{{ $avatarSrc }}" alt="Avatar source" />
                 </a>
+                <div class="user-modal" id="userModal">
+                    <div class="modal-header">
+                        <img src="{{ $avatarSrc }}" alt="User Avatar" />
+                        <div class="user-info">
+                            <h4>{{ $userName }}</h4>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <a href="#"><i class="fas fa-user"></i>Profile</a>
+                        <hr>
+                        <form method="post" action="{{ route('logout') }}" id="logout-form">
+                            @csrf
+                            <a href="#" class="logout" id="logout"><i class="fas fa-sign-out-alt"></i>Log
+                                Out</a>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -46,6 +63,7 @@
         @show
     </main>
 
+    @vite('resources/js/home.js');
     @yield('scripts')
 </body>
 
