@@ -79,7 +79,7 @@ const LICENSE_KEY = "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3Mzg3OTk5OTksImp0aSI6IjllMT
  */
 const AI_API_KEY = "AIzaSyDh-kLwdKJZsNpg3Z3j1JN8I9wGrytKMUk";
 
-const CLOUD_SERVICES_TOKEN_URL = "https://v4j042b7775i.cke-cs.com/token/dev/8dfecd7c093cf6b467e462e6b5e719c8911d786469eee6f876dbbe000f93?limit=10";
+const CLOUD_SERVICES_TOKEN_URL = "";
 
 const editorConfig = {
     toolbar: {
