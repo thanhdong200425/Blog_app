@@ -77,7 +77,7 @@ const LICENSE_KEY = "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3Mzg3OTk5OTksImp0aSI6IjllMT
  * See: https://ckeditor.com/docs/ckeditor5/latest/features/ai-assistant/ai-assistant-integration.html
  * for a full integration and customization guide.
  */
-const AI_API_KEY = "AIzaSyDh-kLwdKJZsNpg3Z3j1JN8I9wGrytKMUk";
+const AI_API_KEY = "";
 
 const CLOUD_SERVICES_TOKEN_URL = "";
 
