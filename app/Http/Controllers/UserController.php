@@ -32,7 +32,7 @@ class UserController extends Controller
         // Regenerate sessionID after log-in
         $request->session()->regenerate();
 
-        return redirect()->route('main');
+        return redirect()->route('main')->with('success', 'Welcome back');
     }
 
     public function signUp(Request $request)
@@ -77,6 +77,6 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('signIn');
+        return redirect()->route('signIn')->with('success', 'Logout successfully');
     }
 }
