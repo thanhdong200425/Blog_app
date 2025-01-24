@@ -49,4 +49,14 @@ class ArticleController extends Controller
 
         return redirect()->route('main')->with('success', 'Added post successfully');
     }
+
+    public function delete(Request $request)
+    {
+        $article = Article::where('id', $request->articleId)->first();
+        if (!$article)
+            return redirect()->route('main')->with('error', 'Can not find your article');
+
+        $article->delete();
+        return redirect()->route('main')->with('success', 'Article was completely deleted');
+    }
 }

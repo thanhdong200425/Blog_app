@@ -1,10 +1,9 @@
 /* Success Message Styles */
 .success-message {
     position: fixed;
-    top: 20px;
+    top: 60px;
     right: 20px;
     z-index: 1000;
-    animation: slideIn 0.5s ease-out forwards;
 }
 
 .success-content {
@@ -48,7 +47,7 @@
 
 /* Auto hide after 5 seconds */
 .success-message {
-    animation: slideIn 0.5s ease-out forwards, fadeOut 0.5s ease-out 4.5s forwards;
+    animation: slideIn 1s ease-out forwards, fadeOut 1s ease-out 5s forwards;
 }
 
 .main-container {

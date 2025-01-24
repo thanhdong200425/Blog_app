@@ -77,9 +77,9 @@ const LICENSE_KEY = "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3Mzg3OTk5OTksImp0aSI6IjllMT
  * See: https://ckeditor.com/docs/ckeditor5/latest/features/ai-assistant/ai-assistant-integration.html
  * for a full integration and customization guide.
  */
-const AI_API_KEY = "";
+const AI_API_KEY = "test";
 
-const CLOUD_SERVICES_TOKEN_URL = "";
+const CLOUD_SERVICES_TOKEN_URL = "https://v4j042b7775i.cke-cs.com/token/dev/8dfecd7c093cf6b467e462e6b5e719c8911d786469eee6f876dbbe000f93?limit=10";
 
 const editorConfig = {
     toolbar: {

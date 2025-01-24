@@ -78,6 +78,17 @@
                         <div class="info">
                             <p>Created at {{ $article->created_at->format('M jS, Y h:i A') }}</p>
                             <div class="article-statistical">
+                                @if (Auth::user()->id == $article->author->id)
+                                    <form method="post" action="{{ route('deleteArticle') }}" id="delete-form-article">
+                                        @csrf
+                                        <input type="hidden" name="articleId" value="{{ $article->id }}" />
+                                        <span>
+                                            <img src="{{ asset('icons/delete-icon.svg') }}" alt="delete icon"
+                                                class="delete-action" />
+                                        </span>
+                                    </form>
+                                @endif
+
                                 <span class="eye">
                                     <img src="{{ asset('icons/eye-icon.svg') }}" alt="read icon" />6.8K
                                 </span>
@@ -213,4 +224,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    @vite('resources/js/article.js')
 @endsection

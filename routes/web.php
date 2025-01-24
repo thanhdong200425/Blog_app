@@ -34,6 +34,8 @@ Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(func
     Route::get('/ask', [ArticleController::class, 'showAskingPage'])->name('ask');
 
     Route::post('/ask', [ArticleController::class, "create"])->name('submit-asking');
+
+    Route::post('/delete', [ArticleController::class, 'delete'])->name('deleteArticle');
 });
 
 // Logout route
