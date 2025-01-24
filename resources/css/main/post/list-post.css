@@ -1,13 +1,15 @@
 /* Success Message Styles */
-.success-message {
+.success-message,
+.error-message {
     position: fixed;
     top: 60px;
     right: 20px;
     z-index: 1000;
+    border-radius: 15px;
 }
 
-.success-content {
-    background-color: #48bb78;
+.success-content,
+.error-content {
     color: white;
     padding: 1rem 1.5rem;
     border-radius: 8px;
@@ -18,7 +20,16 @@
     font-size: 0.95rem;
 }
 
-.check-icon {
+.success-content {
+    background-color: #48bb78;
+}
+
+.error-message {
+    background-color: #f56565;
+}
+
+.check-icon,
+.error-icon {
     width: 24px;
     height: 24px;
 }
@@ -45,8 +56,8 @@
     }
 }
 
-/* Auto hide after 5 seconds */
-.success-message {
+.success-message,
+.error-message {
     animation: slideIn 1s ease-out forwards, fadeOut 1s ease-out 5s forwards;
 }
 

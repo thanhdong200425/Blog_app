@@ -36,6 +36,10 @@ Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(func
     Route::post('/ask', [ArticleController::class, "create"])->name('submit-asking');
 
     Route::post('/delete', [ArticleController::class, 'delete'])->name('deleteArticle');
+
+    Route::get('/update/{slug}-{id}', [ArticleController::class, 'update'])->where(['slug' => '[a-z0-9-]+', 'id' => '[0-9]+'])->name('updateArticle');
+
+    Route::post('/update', [ArticleController::class, 'save'])->name('saveArticle');
 });
 
 // Logout route

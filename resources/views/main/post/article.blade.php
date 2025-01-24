@@ -2,6 +2,10 @@
 
 @section('title', 'Post')
 @section('css-file')
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
     @vite('resources/css/main/post/post.css')
 @endsection
 
@@ -24,9 +28,6 @@
     ?>
     <div class="main-container">
         <div class="post-action-container">
-            {{-- <div class="avatar-author">
-                <img src="https://picsum.photos/200/300" alt="author-image" />
-            </div> --}}
             <div class="votes">
                 <span class="upvote">
                     <img src="{{ asset('icons/upvote-icon.svg') }}" alt="upvote icon" />
@@ -87,6 +88,10 @@
                                                 class="delete-action" />
                                         </span>
                                     </form>
+                                    <span
+                                        onclick="window.location.href = '{{ route('updateArticle', ['slug' => Str::slug($article->title), 'id' => $article->id]) }}'">
+                                        <img src="{{ asset('icons/update-icon.svg') }}" alt="update icon" />
+                                    </span>
                                 @endif
 
                                 <span class="eye">

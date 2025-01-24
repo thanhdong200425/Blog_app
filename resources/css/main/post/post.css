@@ -205,14 +205,16 @@
     opacity: 1;
 }
 .content {
-    padding: 2rem;
+    padding: 2.5rem;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 .content h1 {
-    font-size: 2.5rem;
-    color: #1a202c;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
+    font-size: 2.75rem;
+    color: #0f172a;
+    font-weight: 800;
     line-height: 1.2;
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
 }
 .content h2 {
     font-size: 1.8rem;
@@ -229,10 +231,10 @@
     border-left: 4px solid #2563eb;
 }
 .content p {
-    font-size: 1.1rem;
-    color: #4a5568;
+    font-size: 1.125rem;
+    color: #334155;
     line-height: 1.8;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
 }
 .content .cover-image,
 .content .content-image {
@@ -249,7 +251,10 @@
 
 .content img {
     width: 100%;
-    height: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 2.5rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
 }
 
 .content ul li {
@@ -264,6 +269,61 @@
     color: #2563eb;
     font-weight: bold;
     margin-right: 0.5rem;
+}
+.content strong {
+    color: #0f172a;
+    font-weight: 600;
+}
+.content ul,
+.content ol {
+    margin: 2rem 0;
+    padding-left: 1.25rem;
+    color: #334155;
+}
+
+.content ul li,
+.content ol li {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.content ul li::before {
+    content: "-";
+    color: #2563eb;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: -1px;
+    font-size: 1.5rem;
+}
+
+.content ol {
+    list-style: none;
+    counter-reset: custom-counter;
+}
+
+.content ol li {
+    counter-increment: custom-counter;
+    padding-left: 2rem;
+}
+
+.content ol li::before {
+    content: counter(custom-counter);
+    color: #2563eb;
+    font-weight: 600;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 1rem;
+    background: #eff6ff;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .code-block {
     margin: 2rem 0;
@@ -352,6 +412,67 @@
 .code-block .operator {
     color: #ff7b72;
 }
+/* Inline code styling - updated */
+.content p code,
+.content li code {
+    background: #f8fafc;
+    color: #ef4444;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: "SF Mono", "JetBrains Mono", "Fira Code", monospace;
+    border: 1px solid #e2e8f0;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.content p code:hover,
+.content li code:hover {
+    background: #f1f5f9;
+}
+
+/* Single line code block styling - new */
+.code-block.single-line {
+    margin: 1.5rem 0;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.code-block.single-line pre {
+    margin: 0;
+    padding: 1rem 1.5rem;
+    background: transparent;
+}
+
+.code-block.single-line code {
+    color: #475569;
+    font-family: "SF Mono", "JetBrains Mono", "Fira Code", monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.code-block.single-line .code-header {
+    background: #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.code-block.single-line .code-header span {
+    color: #64748b;
+}
+
+.code-block.single-line .copy-btn {
+    background: #e2e8f0;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+}
+
+.code-block.single-line .copy-btn:hover {
+    background: #cbd5e1;
+    border-color: #94a3b8;
+}
+
 /* Inline code styling */
 .content p code,
 .content li code {
@@ -363,6 +484,93 @@
     font-family: "SF Mono", "JetBrains Mono", "Fira Code", monospace;
     border: 1px solid #30363d;
 }
+
+/* Terminal/Command-line code block styling */
+.code-block.terminal {
+    background: #1a1b26;
+    border: none;
+    margin: 1.5rem 0;
+}
+
+.code-block.terminal .code-header {
+    background: #1f2335;
+    border-bottom: 1px solid #292e42;
+}
+
+.code-block.terminal .code-header span {
+    color: #a9b1d6;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.code-block.terminal .code-header span::before {
+    content: "$";
+    color: #7dcfff;
+    font-weight: bold;
+}
+
+.code-block.terminal pre {
+    background: #1a1b26;
+    padding: 1rem 1.5rem;
+}
+
+.code-block.terminal code {
+    color: #a9b1d6;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: 0.95rem;
+}
+
+.code-block.terminal .copy-btn {
+    background: #292e42;
+    border: 1px solid #3b4261;
+    color: #7dcfff;
+}
+
+.code-block.terminal .copy-btn:hover {
+    background: #3b4261;
+    border-color: #545c7e;
+}
+
+.content ol li .code-block.terminal {
+    margin: 1rem 0 1.5rem;
+    background: #1e1e2e;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.content ol li .code-block.terminal .code-header {
+    background: #181825;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid #313244;
+}
+
+.content ol li .code-block.terminal .code-header span {
+    color: #cdd6f4;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.content ol li .code-block.terminal .code-header span::before {
+    content: "$";
+    color: #89b4fa;
+    font-weight: bold;
+}
+
+.content ol li .code-block.terminal pre {
+    margin: 0;
+    padding: 1rem 1.5rem;
+    background: #1e1e2e;
+}
+
+.content ol li .code-block.terminal code {
+    color: #cdd6f4;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.95rem;
+}
+
 .info-box {
     display: flex;
     gap: 1rem;

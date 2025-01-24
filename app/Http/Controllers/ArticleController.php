@@ -59,4 +59,22 @@ class ArticleController extends Controller
         $article->delete();
         return redirect()->route('main')->with('success', 'Article was completely deleted');
     }
+
+    public function update($slug, $id)
+    {
+        $article = Article::where('id', $id)->first();
+        if (!$article)
+            return redirect()->route('main')->with('error', 'Article not found');
+        return view('main.post.update-article', ['article' => $article]);
+    }
+
+    public function save(Request $request)
+    {
+        Article::where('id', $request->articleId)->update([
+            'title' => $request->title,
+            'content' => $request->content
+        ]);
+
+        return redirect()->route('main')->with('success', 'Successfully updated post');
+    }
 }

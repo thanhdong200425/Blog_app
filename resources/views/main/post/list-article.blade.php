@@ -20,6 +20,18 @@
         </div>
     @endif
 
+    @if (session('error'))
+        <div class="error-message">
+            <div class="error-content">
+                <svg viewBox="0 0 24 24" class="error-icon">
+                    <path fill="currentColor"
+                        d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+                </svg>
+                <span>{{ session('error') }}</span>
+            </div>
+        </div>
+    @endif
+
     <div class="main-container">
         <div class="column left">
             @foreach ($articles as $article)

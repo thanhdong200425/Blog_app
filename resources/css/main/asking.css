@@ -286,6 +286,38 @@
     transform: none;
 }
 
+.cancel-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #e2e8f0;
+    color: #4a5568;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 1rem;
+}
+
+.cancel-button:hover {
+    background: #cbd5e0;
+    transform: translateY(-1px);
+}
+
+.cancel-button:active {
+    transform: translateY(0);
+}
+
+.cancel-button:disabled {
+    background: #e2e8f0;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 .title-input-wrapper {
     position: relative;
     margin: 2rem 0;
