@@ -10,26 +10,11 @@
 @endsection
 
 @section('main-part')
-    <?php
-    $content = $article->content;
-    // Extract all headings (h1-h6) using regex
-    preg_match_all('/<h([1-6])>(.*?)<\/h[1-6]>/i', $content, $matches);
-    $headings = array_map(
-        function ($level, $text) {
-            return [
-                'level' => $level,
-                'text' => strip_tags($text),
-                'anchor' => \Illuminate\Support\Str::slug($text),
-            ];
-        },
-        $matches[1],
-        $matches[2],
-    );
-    ?>
     <div class="main-container">
         <div class="post-action-container">
             <div class="votes">
-                <span class="upvote">
+                <span class="upvote" data-entity-id="{{ $article->id }}" data-entity-type-id="2"
+                    data-url="{{ route('like') }}">
                     <img src="{{ asset('icons/upvote-icon.svg') }}" alt="upvote icon" />
                 </span>
                 <span class="figure">+100</span>

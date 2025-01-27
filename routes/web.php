@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckAuthenticatedForUser;
 use App\Http\Middleware\RedirectIfLoggedIn;
@@ -40,6 +41,10 @@ Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(func
     Route::get('/update/{slug}-{id}', [ArticleController::class, 'update'])->where(['slug' => '[a-z0-9-]+', 'id' => '[0-9]+'])->name('updateArticle');
 
     Route::post('/update', [ArticleController::class, 'save'])->name('saveArticle');
+
+    Route::post('/like', [LikeController::class, 'like'])->name('like');
+
+    Route::post('/unlike', [LikeController::class, 'unlike'])->name('unlike');
 });
 
 // Logout route

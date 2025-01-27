@@ -10,12 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('likes_quantity', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('entity_id');
-            $table->unsignedBigInteger('entity_type_id');
-            $table->bigInteger('quantity');
-            $table->timestamps();
+        Schema::table('likes', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -24,6 +20,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('likes_quantity');
+        //
     }
 };

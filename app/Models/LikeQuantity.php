@@ -8,7 +8,14 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class LikeQuantity extends Model
 {
     //
-    public function likeQuantity(): MorphTo {
+    protected $table = 'likes_quantity';
+    protected $fillable = [
+        'entity_id',
+        'entity_type_id',
+        'quantity'
+    ];
+    public function likeQuantity(): MorphTo
+    {
         return $this->morphTo();
     }
 }
