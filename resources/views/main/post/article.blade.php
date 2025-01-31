@@ -13,11 +13,13 @@
     <div class="main-container">
         <div class="post-action-container">
             <div class="votes">
-                <span class="upvote" data-entity-id="{{ $article->id }}" data-entity-type-id="2"
-                    data-url="{{ route('like') }}">
+                <span
+                    class="upvote {{ $article->likes()->exists() && $article->likes()->where('user_id', Auth::id())->exists() ? 'active' : '' }}"
+                    data-entity-id="{{ $article->id }}" data-url="{{ route('like') }}">
                     <img src="{{ asset('icons/upvote-icon.svg') }}" alt="upvote icon" />
                 </span>
-                <span class="figure">+100</span>
+                <span
+                    class="figure {{ $article->likes()->exists() && $article->likes()->where('user_id', Auth::id())->exists() ? 'active' : '' }}">{{ $article->likeQuantity()->exists() ? $article->likeQuantity()->first()->quantity : 0 }}</span>
                 <span class="downvote">
                     <img src="{{ asset('icons/downvote-icon.svg') }}" alt="downvote icon" />
                 </span>
@@ -68,6 +70,7 @@
                                     <form method="post" action="{{ route('deleteArticle') }}" id="delete-form-article">
                                         @csrf
                                         <input type="hidden" name="articleId" value="{{ $article->id }}" />
+                                        <input type="hidden" name="isOwner" value="true" />
                                         <span>
                                             <img src="{{ asset('icons/delete-icon.svg') }}" alt="delete icon"
                                                 class="delete-action" />

@@ -12,11 +12,13 @@ class Comment extends Model
     /** @use HasFactory<\Database\Factories\CommentFactory> */
     use HasFactory;
 
-    public function likes(): MorphMany {
-        return $this->morphMany(Like::class, 'likeable');
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'entity');
     }
 
-    public function likeQuantity(): MorphOne {
+    public function likeQuantity(): MorphOne
+    {
         return $this->morphOne(LikeQuantity::class, 'likeQuantity');
     }
 

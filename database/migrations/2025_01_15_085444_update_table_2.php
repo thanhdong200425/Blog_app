@@ -15,16 +15,6 @@ return new class extends Migration {
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('article_id')->references('id')->on('articles');
         });
-
-        // Add foreign keys for likes table
-        Schema::table('likes', function (Blueprint $table) {
-            $table->foreign('entity_type_id')->references('id')->on('entity_types');
-        });
-
-        // Add foreign keys for likes_quantity table
-        Schema::table('likes_quantity', function (Blueprint $table) {
-            $table->foreign('entity_type_id')->references('id')->on('entity_types');
-        });
     }
 
     /**
@@ -32,9 +22,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        //
-//        Schema::table('comments', function (Blueprint $table) {
-//            $table->dropForeign()
-//        });
+
     }
 };

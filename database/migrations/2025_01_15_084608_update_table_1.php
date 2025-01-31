@@ -12,12 +12,12 @@ return new class extends Migration {
     {
         // Update likes table
         Schema::table('likes', function (Blueprint $table) {
-            $table->unique(['user_id', 'entity_id', 'entity_type_id']);
+            $table->unique(['user_id', 'entity_id', 'entity_type']);
         });
 
         // Update likes_quantity table
         Schema::table('likes_quantity', function (Blueprint $table) {
-            $table->unique(['entity_id', 'entity_type_id']);
+            $table->unique(['entity_id', 'entity_type']);
         });
     }
 

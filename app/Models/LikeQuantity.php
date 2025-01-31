@@ -11,7 +11,7 @@ class LikeQuantity extends Model
     protected $table = 'likes_quantity';
     protected $fillable = [
         'entity_id',
-        'entity_type_id',
+        'entity_type',
         'quantity'
     ];
     public function likeQuantity(): MorphTo

@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('likes_quantity', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('entity_id');
-            $table->unsignedBigInteger('entity_type_id');
+            $table->string('entity_type');
             $table->bigInteger('quantity');
             $table->timestamps();
         });

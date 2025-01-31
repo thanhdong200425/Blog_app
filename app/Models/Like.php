@@ -11,9 +11,10 @@ class Like extends Model
     /** @use HasFactory<\Database\Factories\LikeFactory> */
     use HasFactory;
 
-    public function likeable(): MorphTo {
+    public function likeable(): MorphTo
+    {
         return $this->morphTo();
     }
 
-    protected $fillable = ['user_id', 'entity_id', 'entity_type_id'];
+    protected $fillable = ['user_id', 'entity_id', 'entity_type'];
 }

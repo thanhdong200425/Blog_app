@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\Like;
 use App\Models\LikeQuantity;
 use Exception;
@@ -15,25 +16,32 @@ class LikeController extends Controller
     public function like(Request $request)
     {
         try {
-            Log::info($request->all());
             // Validate request
             $validatedResult = $request->validate([
                 'entityId' => ['required', 'integer'],
-                'entityTypeId' => ['required', 'integer'],
             ]);
 
-            // Insert into 'likes' table
-            $like = Like::create([
-                'user_id' => Auth::user()->id,
-                'entity_id' => $validatedResult['entityId'],
-                'entity_type_id' => $validatedResult['entityTypeId']
+
+
+
+            // Find the article
+            $article = Article::find($validatedResult['entityId']);
+            // Check whether a like for specific article is exist in likes table
+            if ($article->likes()->where('user_id', Auth::id())->exists())
+                return response()->json([
+                    'error' => 'You have already liked this article'
+                ], 400);
+
+            $article->likes()->create([
+                'user_id' => Auth::id()
             ]);
 
-            // Update or create like quantity
-            LikeQuantity::updateOrCreate([
-                'entity_id' => $validatedResult['entityId'],
-                'entity_type_id' => $validatedResult['entityTypeId']
-            ], ['quantity' => DB::raw('quantity + 1')]);
+            // Create a record for the like quantity for article if not exists or update it
+            $currentQuantity = $article->likeQuantity()->first();
+            $article->likeQuantity()->updateOrCreate(
+                ['entity_id' => $article->id],
+                ['quantity' => ($currentQuantity ? $currentQuantity->quantity : 0) + 1]
+            );
 
             return response()->json(['liked' => true]);
         } catch (Exception $e) {

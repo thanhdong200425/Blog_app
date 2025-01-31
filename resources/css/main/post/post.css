@@ -5,6 +5,36 @@
     margin: 80px auto 0;
     padding: 0 20px;
 }
+
+.error-message {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    z-index: 1000;
+    border-radius: 15px;
+    animation: slideIn 1s ease-out forwards, fadeOut 1s ease-out 5s forwards;
+}
+
+.error-content {
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.error-message {
+    background-color: #f56565;
+}
+
+.error-icon {
+    width: 24px;
+    height: 24px;
+}
+
 .post-action-container {
     position: sticky;
     top: 100px;
@@ -63,6 +93,13 @@
     transform: scale(1.1);
     opacity: 1;
 }
+
+.upvote.active,
+.figure.active {
+    filter: invert(23%) sepia(91%) saturate(6645%) hue-rotate(203deg) brightness(96%) contrast(101%);
+    color: #316eb8;
+}
+
 .figure {
     font-size: 1.1rem;
     color: #555;
@@ -965,4 +1002,26 @@
 .overlay.active {
     opacity: 1;
     visibility: visible;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
 }
