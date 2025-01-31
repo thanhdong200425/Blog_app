@@ -21,9 +21,6 @@ class LikeController extends Controller
                 'entityId' => ['required', 'integer'],
             ]);
 
-
-
-
             // Find the article
             $article = Article::find($validatedResult['entityId']);
             // Check whether a like for specific article is exist in likes table
@@ -44,6 +41,38 @@ class LikeController extends Controller
             );
 
             return response()->json(['liked' => true]);
+        } catch (Exception $e) {
+            Log::error('Like error:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function unlike(Request $request)
+    {
+        try {
+            $validatedResult = $request->validate([
+                'entityId' => ['required', 'integer'],
+            ]);
+
+            // Find the article and delete like of it
+            $article = Article::find($validatedResult['entityId']);
+            $likeArticle = $article->likes()->where('user_id', Auth::id())->first();
+
+            // Check whether a user has liked the article
+            if (!$likeArticle)
+                return response()->json(['error' => 'You have not liked this post yet'], 400);
+
+            $likeArticle->delete();
+
+            // Decrement like quantity
+            $article->likeQuantity()->update([
+                'quantity' => $article->likeQuantity()->first()->quantity - 1
+            ]);
+
+            return response()->json(['liked' => false]);
         } catch (Exception $e) {
             Log::error('Like error:', [
                 'message' => $e->getMessage(),

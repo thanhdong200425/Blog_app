@@ -75,7 +75,7 @@
                             </span>
                             <span class="up-and-down">
                                 <img src="/icons/up-and-down-icon.svg" />
-                                <span>1</span>
+                                <span>{{ $article->likeQuantity()->exists() ? $article->likeQuantity()->first()->quantity : 0 }}</span>
                             </span>
                         </div>
 
@@ -108,7 +108,7 @@
                         </span>
                         <span class="up-and-down">
                             <img src="/icons/up-and-down-icon.svg" />
-                            <span>1</span>
+                            <span>{{ $article->likeQuantity()->exists() ? $article->likeQuantity()->first()->quantity : 0 }}</span>
                         </span>
                     </div>
                     <span>{{ $article->author->username }}</span>

@@ -42,7 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    setEventForLikeButton();
+    setEventForLikeButton(".votes .upvote");
+    setEventForLikeButton(".votes .downvote");
 });
 
 const createPopUp = () => {
@@ -65,9 +66,8 @@ const handleSubmitForm = () => {
 };
 
 // Set event for like button
-const setEventForLikeButton = () => {
-    const likeButton = document.querySelector(".votes .upvote");
-    likeButton.addEventListener("click", (e) => {
+const setEventForLikeButton = (className) => {
+    document.querySelector(className).addEventListener("click", (e) => {
         const entityId = parseInt(e.currentTarget.dataset.entityId),
             route = e.currentTarget.dataset.url;
         toggleLike(route, entityId);
@@ -94,17 +94,18 @@ const toggleLike = async (route, entityId) => {
             return;
         }
 
-        updateUI();
+        updateUI("upvote", "downvote", response.liked);
     } catch (error) {
         console.log(error);
     }
 };
 
-const updateUI = () => {
-    document.querySelector(".upvote").classList.add("active");
+const updateUI = (likeClassName, unlikeClassName, isLike) => {
+    document.querySelector(`.${likeClassName}`).classList.toggle("active");
+    document.querySelector(`.${unlikeClassName}`).classList.toggle("active");
     const likeCount = document.querySelector(".figure");
-    likeCount.classList.add("active");
-    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+    likeCount.classList.toggle("active", isLike);
+    likeCount.textContent = isLike ? parseInt(likeCount.textContent) + 1 : parseInt(likeCount.textContent) - 1;
 };
 
 const showToast = (message) => {

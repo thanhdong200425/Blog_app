@@ -20,7 +20,7 @@
                 </span>
                 <span
                     class="figure {{ $article->likes()->exists() && $article->likes()->where('user_id', Auth::id())->exists() ? 'active' : '' }}">{{ $article->likeQuantity()->exists() ? $article->likeQuantity()->first()->quantity : 0 }}</span>
-                <span class="downvote">
+                <span class="downvote" data-entity-id="{{ $article->id }}" data-url="{{ route('unlike') }}">
                     <img src="{{ asset('icons/downvote-icon.svg') }}" alt="downvote icon" />
                 </span>
             </div>
