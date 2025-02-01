@@ -1,3 +1,5 @@
+import { formatDistanceToNow } from "date-fns";
+
 document.addEventListener("DOMContentLoaded", function () {
     const isOwner = document.querySelector('input[name="isOwner"]');
     if (isOwner) {
@@ -44,6 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setEventForLikeButton(".votes .upvote");
     setEventForLikeButton(".votes .downvote");
+    setEventForCommentButton();
+    document.querySelectorAll(".comment-item").forEach(setupReplyHandlers);
 });
 
 const createPopUp = () => {
@@ -64,6 +68,130 @@ const createPopUp = () => {
 const handleSubmitForm = () => {
     document.querySelector("#delete-form-article").submit();
 };
+
+const setEventForCommentButton = () => {
+    document.querySelector(".submit-btn").addEventListener("click", async (e) => {
+        try {
+            e.preventDefault();
+            const contentPart = document.querySelector("#content"),
+                articleId = document.querySelector('input[name="article_id"]').value,
+                url = document.querySelector('input[name="url"]').value;
+            const newComment = await addAComment(url, contentPart.value.trim(), articleId);
+            contentPart.value = "";
+            createCommentComponent(newComment.data);
+        } catch (error) {
+            console.log("Error in setCommentButton: " + error);
+        }
+    });
+};
+
+const addAComment = async (url, content, articleId) => {
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            },
+            body: JSON.stringify({
+                content,
+                articleId,
+            }),
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log("Error in addAComment function: " + error);
+        return;
+    }
+};
+
+const createCommentComponent = (newCommentData) => {
+    const listComment = document.querySelector(".comments-list");
+    const newCommentPart = document.createElement("div");
+    newCommentPart.classList.add("comment-item");
+    newCommentPart.innerHTML = `
+                        <div class="comment-user">
+                            <img src="${newCommentData.author.image_url}" alt="Commenter avatar" />
+                        </div>
+                        <div class="comment-content">
+                            <div class="comment-header">
+                                <div class="user-info">
+                                    <h4>${newCommentData.author.username}</h4>
+                                    <span class="time">${formatDistanceToNow(new Date(newCommentData.created_at))}</span>
+                                </div>
+                                <div class="comment-actions">
+                                    <button class="action-btn">
+                                        <img src="/icons/dots-icon.svg" alt="More actions" />
+                                    </button>
+                                </div>
+                            </div>
+                            <p>${newCommentData.content}</p>
+                            <div class="comment-footer">
+                                <div class="reactions">
+                                    <button class="reaction-btn">
+                                        <img src="/icons/like-icon.svg" alt="Like" />
+                                        <span>24</span>
+                                    </button>
+                                    <button class="reaction-btn reply-trigger">
+                                        <img src="/icons/reply-icon.svg" alt="Reply" />
+                                        <span>Reply</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="reply-section">
+                                <div class="reply-input-wrapper">
+                                    <div class="user-avatar">
+                                        <img src="${currentUserAvatar}" alt="Your avatar" />
+                                    </div>
+                                    <div class="reply-content">
+                                        <textarea placeholder="Write a reply..."></textarea>
+                                        <div class="reply-actions">
+                                            <button class="reply-cancel">Cancel</button>
+                                            <button class="reply-submit">Reply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    `;
+
+    setupReplyHandlers(newCommentPart);
+    listComment.appendChild(newCommentPart);
+};
+
+function setupReplyHandlers(commentElement) {
+    const replyTrigger = commentElement.querySelector(".reply-trigger");
+    const replySection = commentElement.querySelector(".reply-section");
+    const replyCancel = commentElement.querySelector(".reply-cancel");
+    const replySubmit = commentElement.querySelector(".reply-submit");
+    const replyTextarea = commentElement.querySelector(".reply-content textarea");
+
+    replyTrigger.addEventListener("click", () => {
+        document.querySelectorAll(".reply-section.active").forEach((section) => {
+            if (section !== replySection) {
+                section.classList.remove("active");
+            }
+        });
+        replySection.classList.toggle("active");
+        if (replySection.classList.contains("active")) {
+            replyTextarea.focus();
+        }
+    });
+
+    replyCancel.addEventListener("click", () => {
+        replySection.classList.remove("active");
+        replyTextarea.value = "";
+    });
+
+    replySubmit.addEventListener("click", async () => {
+        const replyContent = replyTextarea.value.trim();
+        if (replyContent) {
+            replySection.classList.remove("active");
+            replyTextarea.value = "";
+        }
+    });
+}
 
 // Set event for like button
 const setEventForLikeButton = (className) => {

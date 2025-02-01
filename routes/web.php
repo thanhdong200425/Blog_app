@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckAuthenticatedForUser;
@@ -45,6 +46,8 @@ Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(func
     Route::post('/like', [LikeController::class, 'like'])->name('like');
 
     Route::post('/unlike', [LikeController::class, 'unlike'])->name('unlike');
+
+    Route::post('/comment', [CommentController::class, 'comment'])->name('comment');
 });
 
 // Logout route

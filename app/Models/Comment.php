@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -22,5 +23,35 @@ class Comment extends Model
         return $this->morphOne(LikeQuantity::class, 'likeQuantity');
     }
 
-    protected $fillable = ['user_id', 'article_id', 'content'];
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Comment::class, "parent_id")->orderBy('path');
+    }
+
+    public function getParentPath()
+    {
+        return $this->where('path', substr($this->path, 0, strrpos($this->path, '.')));
+    }
+
+    public function getChildrenPath()
+    {
+        return $this->where('path', 'LIKE', "{$this->path}.%");
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->setTimezone('Asia/Ho_Chi_Minh');
+    }
+
+    protected $fillable = ['user_id', 'article_id', 'content', 'path', 'parent_id'];
 }

@@ -134,12 +134,15 @@
                 </div>
             </div>
 
+            {{-- Comment input part --}}
             <div class="comment-input">
                 <div class="user-avatar">
                     <img src="https://picsum.photos/200/200" alt="User avatar" />
                 </div>
                 <div class="input-wrapper">
-                    <textarea placeholder="Write a comment..."></textarea>
+                    <textarea placeholder="Write a comment..." name="content" id="content" required></textarea>
+                    <input type="hidden" name="article_id" value="{{ $article->id }}" />
+                    <input type="hidden" name="url" value="{{ route('comment') }}" />
                     <div class="input-actions">
                         <button class="cancel-btn">Cancel</button>
                         <button class="submit-btn">Comment</button>
@@ -147,73 +150,55 @@
                 </div>
             </div>
 
-            <div class="comments-list">
-                <!-- Comment Item -->
-                <div class="comment-item">
-                    <div class="comment-user">
-                        <img src="https://picsum.photos/200/200" alt="Commenter avatar" />
-                    </div>
-                    <div class="comment-content">
-                        <div class="comment-header">
-                            <div class="user-info">
-                                <h4>John Doe</h4>
-                                <span class="time">2 hours ago</span>
-                            </div>
-                            <div class="comment-actions">
-                                <button class="action-btn">
-                                    <img src="{{ asset('icons/dots-icon.svg') }}" alt="More actions" />
-                                </button>
-                            </div>
-                        </div>
-                        <p>This is a great article! The explanation about Laravel and Vue.js integration is very clear and
-                            helpful.</p>
-                        <div class="comment-footer">
-                            <div class="reactions">
-                                <button class="reaction-btn">
-                                    <img src="{{ asset('icons/like-icon.svg') }}" alt="Like" />
-                                    <span>24</span>
-                                </button>
-                                <button class="reaction-btn">
-                                    <img src="{{ asset('icons/reply-icon.svg') }}" alt="Reply" />
-                                    <span>Reply</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Nested Comment -->
-                <div class="comment-item nested">
-                    <div class="comment-user">
-                        <img src="https://picsum.photos/200/201" alt="Commenter avatar" />
-                    </div>
-                    <div class="comment-content">
-                        <div class="comment-header">
-                            <div class="user-info">
-                                <h4>Jane Smith</h4>
-                                <span class="time">1 hour ago</span>
+            <div class="comments-list">
+                @foreach ($article->comments as $comment)
+                    <div class="comment-item">
+                        <div class="comment-user">
+                            <img src="{{ $comment->author->image_url }}" alt="Commenter avatar" />
+                        </div>
+                        <div class="comment-content">
+                            <div class="comment-header">
+                                <div class="user-info">
+                                    <h4>{{ $comment->author->username }}</h4>
+                                    <span class="time">{{ $comment->created_at->diffForHumans() }}</span>
+                                </div>
+                                <div class="comment-actions">
+                                    <button class="action-btn">
+                                        <img src="{{ asset('icons/dots-icon.svg') }}" alt="More actions" />
+                                    </button>
+                                </div>
                             </div>
-                            <div class="comment-actions">
-                                <button class="action-btn">
-                                    <img src="{{ asset('icons/dots-icon.svg') }}" alt="More actions" />
-                                </button>
+                            <p>{{ $comment->content }}</p>
+                            <div class="comment-footer">
+                                <div class="reactions">
+                                    <button class="reaction-btn">
+                                        <img src="{{ asset('icons/like-icon.svg') }}" alt="Like" />
+                                        <span>24</span>
+                                    </button>
+                                    <button class="reaction-btn reply-trigger">
+                                        <img src="{{ asset('icons/reply-icon.svg') }}" alt="Reply" />
+                                        <span>Reply</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="reply-section">
+                                <div class="reply-input-wrapper">
+                                    <div class="user-avatar">
+                                        <img src="{{ Auth::user()->image_url }}" alt="Your avatar" />
+                                    </div>
+                                    <div class="reply-content">
+                                        <textarea placeholder="Write a reply..."></textarea>
+                                        <div class="reply-actions">
+                                            <button class="reply-cancel">Cancel</button>
+                                            <button class="reply-submit">Reply</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <p>Agreed! Especially the part about Vue.js 3 features.</p>
-                        <div class="comment-footer">
-                            <div class="reactions">
-                                <button class="reaction-btn">
-                                    <img src="{{ asset('icons/like-icon.svg') }}" alt="Like" />
-                                    <span>12</span>
-                                </button>
-                                <button class="reaction-btn">
-                                    <img src="{{ asset('icons/reply-icon.svg') }}" alt="Reply" />
-                                    <span>Reply</span>
-                                </button>
-                            </div>
-                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

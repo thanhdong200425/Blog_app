@@ -17,8 +17,9 @@ class ArticleController extends Controller
 
     public function show($slug, $id)
     {
-        $article = Article::with('author')->where('id', $id)->first();
+        $article = Article::with(['author', 'comments.author'])->where('id', $id)->first();
         return view('main.post.article', ['article' => $article]);
+
     }
 
     public function showAskingPage()
