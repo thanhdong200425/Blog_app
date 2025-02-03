@@ -32,7 +32,8 @@ class CommentController extends Controller
             'user_id' => Auth::id(),
             'article_id' => $validatedData['articleId'],
             'content' => $validatedData['content'],
-            'path' => $commentPath
+            'path' => $commentPath,
+            "parent_id" => $validatedData['parentId'] ?? null
         ]);
 
         // Perform a eager loading to the new comment
@@ -53,8 +54,9 @@ class CommentController extends Controller
         // When the comment is a children (reply comment)
         try {
             $parent = Comment::findOrFail($parentId);
-            $childQuantity = $parent->children()->count();
-            return (string) ($parent->path . '.' . ($childQuantity + 1));
+            $parentPath = $parent->path;
+            $childQuantity = Comment::where('parent_id', $parentId)->where('path', 'like', "{$parentPath}.%")->count();
+            return "{$parentPath}." . ($childQuantity + 1);
         } catch (Exception $e) {
             Log::error('Parent comment does not found: ' + $e->getMessage());
             throw $e;

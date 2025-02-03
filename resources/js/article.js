@@ -85,7 +85,7 @@ const setEventForCommentButton = () => {
     });
 };
 
-const addAComment = async (url, content, articleId) => {
+const addAComment = async (url, content, articleId, parentId = null) => {
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -96,8 +96,10 @@ const addAComment = async (url, content, articleId) => {
             body: JSON.stringify({
                 content,
                 articleId,
+                ...(parentId && { parentId }),
             }),
         });
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -106,10 +108,12 @@ const addAComment = async (url, content, articleId) => {
     }
 };
 
-const createCommentComponent = (newCommentData) => {
+const createCommentComponent = (newCommentData, targetComment = null) => {
     const listComment = document.querySelector(".comments-list");
     const newCommentPart = document.createElement("div");
     newCommentPart.classList.add("comment-item");
+    newCommentPart.style.marginLeft = `${Math.min(newCommentData.path.split(".").length - 1, 3) * 60}px`;
+    newCommentPart.dataset.id = newCommentData.id;
     newCommentPart.innerHTML = `
                         <div class="comment-user">
                             <img src="${newCommentData.author.image_url}" alt="Commenter avatar" />
@@ -142,7 +146,7 @@ const createCommentComponent = (newCommentData) => {
                             <div class="reply-section">
                                 <div class="reply-input-wrapper">
                                     <div class="user-avatar">
-                                        <img src="${currentUserAvatar}" alt="Your avatar" />
+                                        <img src="${newCommentData.author.image_url}" alt="Your avatar" />
                                     </div>
                                     <div class="reply-content">
                                         <textarea placeholder="Write a reply..."></textarea>
@@ -155,9 +159,8 @@ const createCommentComponent = (newCommentData) => {
                             </div>
                         </div>
     `;
-
     setupReplyHandlers(newCommentPart);
-    listComment.appendChild(newCommentPart);
+    targetComment && targetComment.parentNode ? targetComment.parentNode.insertBefore(newCommentPart, targetComment.nextSibling) : listComment.appendChild(newCommentPart);
 };
 
 function setupReplyHandlers(commentElement) {
@@ -184,11 +187,21 @@ function setupReplyHandlers(commentElement) {
         replyTextarea.value = "";
     });
 
-    replySubmit.addEventListener("click", async () => {
-        const replyContent = replyTextarea.value.trim();
-        if (replyContent) {
+    replySubmit.addEventListener("click", async (e) => {
+        try {
+            const replyContent = replyTextarea.value.trim(),
+                parentCommentId = commentElement.dataset.id,
+                articleId = document.querySelector('input[name="article_id"]').value,
+                url = document.querySelector('input[name="url"]').value,
+                parentComponent = e.target.closest(".comment-item");
+
+            if (!replyContent) return;
+
+            const newComment = await addAComment(url, replyContent, articleId, parentCommentId);
             replySection.classList.remove("active");
-            replyTextarea.value = "";
+            createCommentComponent(newComment.data, parentComponent);
+        } catch (error) {
+            console.log("Error when hit reply button: " + error);
         }
     });
 }

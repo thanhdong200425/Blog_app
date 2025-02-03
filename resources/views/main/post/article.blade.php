@@ -153,7 +153,11 @@
 
             <div class="comments-list">
                 @foreach ($article->comments as $comment)
-                    <div class="comment-item">
+                    @php
+                        $numberOfDots = substr_count($comment->path, '.');
+                    @endphp
+                    <div class="comment-item" style="margin-left: {{ ($numberOfDots >= 3 ? 3 : $numberOfDots) * 60 }}px"
+                        data-id="{{ $comment->id }}">
                         <div class="comment-user">
                             <img src="{{ $comment->author->image_url }}" alt="Commenter avatar" />
                         </div>
@@ -189,6 +193,7 @@
                                     </div>
                                     <div class="reply-content">
                                         <textarea placeholder="Write a reply..."></textarea>
+                                        <input type="hidden" name="comment_id" value="{{ $comment->id }}" />
                                         <div class="reply-actions">
                                             <button class="reply-cancel">Cancel</button>
                                             <button class="reply-submit">Reply</button>
