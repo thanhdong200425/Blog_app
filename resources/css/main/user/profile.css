@@ -1,3 +1,66 @@
+/* Success Message Styles */
+.success-message,
+.error-message {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    z-index: 1000;
+    border-radius: 15px;
+}
+
+.success-content,
+.error-content {
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.success-content {
+    background-color: #48bb78;
+}
+
+.error-message {
+    background-color: #f56565;
+}
+
+.check-icon,
+.error-icon {
+    width: 24px;
+    height: 24px;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.success-message,
+.error-message {
+    animation: slideIn 1s ease-out forwards, fadeOut 1s ease-out 5s forwards;
+}
+
 .profile-container {
     max-width: 1200px;
     margin: 8rem auto;

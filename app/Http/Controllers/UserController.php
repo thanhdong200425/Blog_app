@@ -82,6 +82,32 @@ class UserController extends Controller
 
     public function show()
     {
-        return view('main.profile', ['user' => Auth::user(), 'articles' => Auth::user()->articles]);
+        return view('main.user.profile', ['user' => Auth::user(), 'articles' => Auth::user()->articles]);
     }
+
+    public function update()
+    {
+        return view('main.user.update-profile', ['user' => Auth::user()]);
+    }
+
+    public function save(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('signIn');
+        }
+
+        // Validate request data
+        $validatedData = $request->validate([
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'date_of_birth' => 'nullable|date',
+        ]);
+
+        // Update user profile
+        $user->fill($validatedData)->save();
+
+        return redirect()->route('showProfile')->with('success', 'Profile updated successfully');
+    }
+
 }

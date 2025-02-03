@@ -64,7 +64,7 @@
         @show
     </main>
 
-    @vite('resources/js/home.js');
+    @vite('resources/js/home.js')
     @yield('scripts')
 </body>
 

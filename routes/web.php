@@ -55,4 +55,6 @@ Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::prefix('/profile')->middleware(CheckAuthenticatedForUser::class)->group(function () {
     Route::get('/', [UserController::class, 'show'])->name('showProfile');
+    Route::get('/update', [UserController::class, 'update'])->name('updateProfile');
+    Route::post('/update', [UserController::class, 'save'])->name('saveProfile');
 });
