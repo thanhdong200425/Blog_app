@@ -20,7 +20,7 @@ class Comment extends Model
 
     public function likeQuantity(): MorphOne
     {
-        return $this->morphOne(LikeQuantity::class, 'likeQuantity');
+        return $this->morphOne(LikeQuantity::class, 'entity');
     }
 
     public function parent()

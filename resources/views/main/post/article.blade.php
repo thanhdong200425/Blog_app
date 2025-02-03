@@ -81,12 +81,9 @@
                                         <img src="{{ asset('icons/update-icon.svg') }}" alt="update icon" />
                                     </span>
                                 @endif
-
-                                <span class="eye">
-                                    <img src="{{ asset('icons/eye-icon.svg') }}" alt="read icon" />6.8K
-                                </span>
                                 <span class="comment">
-                                    <img src="{{ asset('icons/comment-icon.svg') }}" alt="comment icon" />3
+                                    <img src="{{ asset('icons/comment-icon.svg') }}" alt="comment icon" />
+                                    {{ $article->comments->count() ?? 0 }}
                                 </span>
                                 <span class="bookmark-icon">
                                     <img src="{{ asset('icons/bookmark-icon.svg') }}" alt="bookmark icon" />14
@@ -155,6 +152,8 @@
                 @foreach ($article->comments as $comment)
                     @php
                         $numberOfDots = substr_count($comment->path, '.');
+                        $isLiked =
+                            $comment->likes()->exists() && $comment->likes()->where('user_id', Auth::id())->exists();
                     @endphp
                     <div class="comment-item" style="margin-left: {{ ($numberOfDots >= 3 ? 3 : $numberOfDots) * 60 }}px"
                         data-id="{{ $comment->id }}">
@@ -176,9 +175,10 @@
                             <p>{{ $comment->content }}</p>
                             <div class="comment-footer">
                                 <div class="reactions">
-                                    <button class="reaction-btn">
+                                    <button class="reaction-btn {{ $isLiked ? 'active' : '' }}"
+                                        data-id="{{ $comment->id }}">
                                         <img src="{{ asset('icons/like-icon.svg') }}" alt="Like" />
-                                        <span>24</span>
+                                        <span class="comment-figure">{{ $comment->likes->count() }}</span>
                                     </button>
                                     <button class="reaction-btn reply-trigger">
                                         <img src="{{ asset('icons/reply-icon.svg') }}" alt="Reply" />

@@ -872,6 +872,8 @@
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
 }
 .reaction-btn:hover {
     background: #f1f5f9;
@@ -886,6 +888,50 @@
 .reaction-btn:hover img {
     opacity: 1;
 }
+.reaction-btn.active,
+.comment-figure.active {
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.reaction-btn.active img {
+    opacity: 1;
+    filter: invert(23%) sepia(91%) saturate(6645%) hue-rotate(203deg) brightness(96%) contrast(101%);
+}
+
+.reaction-btn.active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #eff6ff;
+    z-index: -1;
+    border-radius: 4px;
+}
+
+.reaction-btn.active:hover {
+    background: #dbeafe;
+}
+
+/* Add animation for like action */
+@keyframes likeAnimation {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.reaction-btn.active img {
+    animation: likeAnimation 0.5s ease-in-out;
+}
+
 @media (max-width: 640px) {
     .comment-header {
         flex-direction: column;

@@ -44,10 +44,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    setEventForLikeButton(".votes .upvote");
-    setEventForLikeButton(".votes .downvote");
+    setEventForLikeButton(".votes .upvote", "upvote", "downvote", "figure");
+    setEventForLikeButton(".votes .downvote", "upvote", "downvote", "figure");
     setEventForCommentButton();
+
     document.querySelectorAll(".comment-item").forEach(setupReplyHandlers);
+    document.querySelectorAll(".reactions .reaction-btn[data-id]").forEach((button) => setCommentLikeHandlers(button));
 });
 
 const createPopUp = () => {
@@ -133,9 +135,9 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
                             <p>${newCommentData.content}</p>
                             <div class="comment-footer">
                                 <div class="reactions">
-                                    <button class="reaction-btn">
+                                    <button class="reaction-btn" data-id="${newCommentData.id}">
                                         <img src="/icons/like-icon.svg" alt="Like" />
-                                        <span>24</span>
+                                        <span class="comment-figure">0</span>
                                     </button>
                                     <button class="reaction-btn reply-trigger">
                                         <img src="/icons/reply-icon.svg" alt="Reply" />
@@ -160,6 +162,7 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
                         </div>
     `;
     setupReplyHandlers(newCommentPart);
+    setCommentLikeHandlers(newCommentPart.querySelector(".reaction-btn"));
     targetComment && targetComment.parentNode ? targetComment.parentNode.insertBefore(newCommentPart, targetComment.nextSibling) : listComment.appendChild(newCommentPart);
 };
 
@@ -206,16 +209,26 @@ function setupReplyHandlers(commentElement) {
     });
 }
 
-// Set event for like button
-const setEventForLikeButton = (className) => {
+// Set event for like button (article)
+const setEventForLikeButton = (className, likeClassName, unlikeClassName, figureClassName) => {
     document.querySelector(className).addEventListener("click", (e) => {
         const entityId = parseInt(e.currentTarget.dataset.entityId),
             route = e.currentTarget.dataset.url;
-        toggleLike(route, entityId);
+        toggleLike(route, entityId, "article", likeClassName, unlikeClassName, figureClassName);
     });
 };
 
-const toggleLike = async (route, entityId) => {
+// Set event for like button (comment)
+const setCommentLikeHandlers = (button) => {
+    button.addEventListener("click", (e) => {
+        const commentId = parseInt(e.currentTarget.dataset.id);
+        const likeRoute = document.querySelector("span.upvote").dataset.url;
+
+        toggleLike(likeRoute, commentId, "comment", `reaction-btn[data-id="${commentId}"]`, null, `reaction-btn[data-id="${commentId}"] .comment-figure`);
+    });
+};
+
+const toggleLike = async (route, entityId, type, likeClassName, unlikeClassName, figureClassName) => {
     try {
         const request = await fetch(route, {
             method: "POST",
@@ -225,6 +238,7 @@ const toggleLike = async (route, entityId) => {
             },
             body: JSON.stringify({
                 entityId,
+                type,
             }),
         });
 
@@ -234,17 +248,16 @@ const toggleLike = async (route, entityId) => {
             showToast(response.error);
             return;
         }
-
-        updateUI("upvote", "downvote", response.liked);
+        updateUI(likeClassName, unlikeClassName, figureClassName, response.liked);
     } catch (error) {
         console.log(error);
     }
 };
 
-const updateUI = (likeClassName, unlikeClassName, isLike) => {
+const updateUI = (likeClassName, unlikeClassName, figureClassName, isLike) => {
     document.querySelector(`.${likeClassName}`).classList.toggle("active");
-    document.querySelector(`.${unlikeClassName}`).classList.toggle("active");
-    const likeCount = document.querySelector(".figure");
+    unlikeClassName && document.querySelector(`.${unlikeClassName}`).classList.toggle("active");
+    const likeCount = document.querySelector(`.${figureClassName}`);
     likeCount.classList.toggle("active", isLike);
     likeCount.textContent = isLike ? parseInt(likeCount.textContent) + 1 : parseInt(likeCount.textContent) - 1;
 };

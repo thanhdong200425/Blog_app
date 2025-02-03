@@ -71,7 +71,7 @@
 
                             <span class="bubble-chat">
                                 <img src="/icons/bubble-chat-icon.svg" />
-                                <span>2</span>
+                                <span>{{ $article->comments->count() ?? 0 }}</span>
                             </span>
                             <span class="up-and-down">
                                 <img src="/icons/up-and-down-icon.svg" />
