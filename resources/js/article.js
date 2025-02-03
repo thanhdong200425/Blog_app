@@ -50,6 +50,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll(".comment-item").forEach(setupReplyHandlers);
     document.querySelectorAll(".reactions .reaction-btn[data-id]").forEach((button) => setCommentLikeHandlers(button));
+
+    // Setup action popups for existing comments
+    document.querySelectorAll(".comment-item").forEach((comment) => {
+        setupCommentActionPopup(comment);
+    });
 });
 
 const createPopUp = () => {
@@ -130,6 +135,12 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
                                     <button class="action-btn">
                                         <img src="/icons/dots-icon.svg" alt="More actions" />
                                     </button>
+                                    <div class="comment-action-popup">
+                                        <div class="action-item delete-comment">
+                                            <img src="/icons/delete-icon.svg" alt="Delete" />
+                                            <span>Delete</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <p>${newCommentData.content}</p>
@@ -163,6 +174,7 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
     `;
     setupReplyHandlers(newCommentPart);
     setCommentLikeHandlers(newCommentPart.querySelector(".reaction-btn"));
+    setupCommentActionPopup(newCommentPart);
     targetComment && targetComment.parentNode ? targetComment.parentNode.insertBefore(newCommentPart, targetComment.nextSibling) : listComment.appendChild(newCommentPart);
 };
 
@@ -206,6 +218,50 @@ function setupReplyHandlers(commentElement) {
         } catch (error) {
             console.log("Error when hit reply button: " + error);
         }
+    });
+}
+
+function setupCommentActionPopup(commentElement) {
+    const actionBtn = commentElement.querySelector(".action-btn");
+    const actionPopup = commentElement.querySelector(".comment-action-popup");
+    const deleteAction = commentElement.querySelector(".delete-comment");
+
+    // Toggle popup when clicking action button
+    actionBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        // Close all other open popups
+        document.querySelectorAll(".comment-action-popup.active").forEach((popup) => {
+            if (popup !== actionPopup) {
+                popup.classList.remove("active");
+            }
+        });
+        actionPopup.classList.toggle("active");
+    });
+
+    // Close popup when clicking outside
+    document.addEventListener("click", (e) => {
+        if (!actionPopup.contains(e.target) && !actionBtn.contains(e.target)) {
+            actionPopup.classList.remove("active");
+        }
+    });
+
+    // Handle delete action
+    deleteAction.addEventListener("click", async () => {
+        // TODO: Add your delete comment API call here
+        console.log("Delete comment:", commentElement.dataset.id);
+        const response = await fetch("http://127.0.0.1:8000/main/delete-comment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            },
+            body: JSON.stringify({
+                id: commentElement.dataset.id,
+            }),
+        });
+
+        const result = await response.json();
+        commentElement.remove();
     });
 }
 

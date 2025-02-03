@@ -62,4 +62,30 @@ class CommentController extends Controller
             throw $e;
         }
     }
+
+    public function delete(Request $request)
+    {
+        $validatedResult = $request->validate([
+            'id' => 'required'
+        ]);
+
+        $comment = Comment::find($validatedResult['id']);
+
+        if (!$comment) {
+            return response()->json([
+                'message' => 'Comment not found'
+            ], 404);
+        }
+
+        if ($comment->user_id !== Auth::id()) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $comment->delete();
+        return response()->json([
+            'delete' => true
+        ], 200);
+    }
 }

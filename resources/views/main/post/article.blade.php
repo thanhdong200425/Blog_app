@@ -163,6 +163,12 @@
                                     <button class="action-btn">
                                         <img src="{{ asset('icons/dots-icon.svg') }}" alt="More actions" />
                                     </button>
+                                    <div class="comment-action-popup">
+                                        <div class="action-item delete-comment">
+                                            <img src="{{ asset('icons/delete-icon.svg') }}" alt="Delete" />
+                                            <span>Delete</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <p>{{ $comment->content }}</p>

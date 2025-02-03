@@ -48,6 +48,8 @@ Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(func
     Route::post('/unlike', [LikeController::class, 'unlike'])->name('unlike');
 
     Route::post('/comment', [CommentController::class, 'comment'])->name('comment');
+
+    Route::post('/delete-comment', [CommentController::class, 'delete'])->name('deleteComment');
 });
 
 // Logout route
