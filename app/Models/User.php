@@ -15,4 +15,9 @@ class User extends Authenticatable
     {
         return $this->hashed_password;
     }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
 }

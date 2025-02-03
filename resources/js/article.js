@@ -222,7 +222,7 @@ const setEventForLikeButton = (className, likeClassName, unlikeClassName, figure
 const setCommentLikeHandlers = (button) => {
     button.addEventListener("click", (e) => {
         const commentId = parseInt(e.currentTarget.dataset.id);
-        const likeRoute = document.querySelector("span.upvote").dataset.url;
+        const likeRoute = e.currentTarget.classList.contains("active") ? document.querySelector("span.downvote").dataset.url : document.querySelector("span.upvote").dataset.url;
 
         toggleLike(likeRoute, commentId, "comment", `reaction-btn[data-id="${commentId}"]`, null, `reaction-btn[data-id="${commentId}"] .comment-figure`);
     });

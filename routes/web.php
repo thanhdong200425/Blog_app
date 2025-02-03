@@ -52,3 +52,7 @@ Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(func
 
 // Logout route
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
+Route::prefix('/profile')->middleware(CheckAuthenticatedForUser::class)->group(function () {
+    Route::get('/', [UserController::class, 'show'])->name('showProfile');
+});

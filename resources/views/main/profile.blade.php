@@ -1,0 +1,67 @@
+@extends('main.home')
+
+@section('title', 'Profile')
+@section('css-file')
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    @vite('resources/css/main/profile.css')
+@endsection
+
+@section('main-part')
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <img src="{{ $user->image_url }}" alt="Profile Avatar">
+            </div>
+            <div class="profile-info">
+                <div class="profile-header-top">
+                    <h1>{{ $user->first_name && $user->last_name ? "{$user->first_name} {$user->last_name}" : $user->username }}
+                    </h1>
+                    <button class="edit-profile-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                        </svg>
+                        Edit Profile
+                    </button>
+                </div>
+                <p class="bio">Senior Software Engineer | Tech Blogger | Coffee Enthusiast</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="number">{{ $user->articles->count() }}</span>
+                        <span class="label">Articles</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="number">1.2k</span>
+                        <span class="label">Followers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="articles-section">
+            <h2>Published Articles</h2>
+            <div class="articles-grid">
+                @foreach ($articles as $article)
+                    @php
+                        preg_match('/\!\[\]\((.*?)\)/', $article->content, $matches);
+                    @endphp
+                    <article class="article-card"
+                        onclick="window.location.href='{{ route('article', ['slug' => Str::slug($article->title), 'id' => $article->id]) }}'">
+                        <img src="{{ $matches[1] }}" alt="Article thumbnail">
+                        <div class="article-content">
+                            <h3>{{ $article->title }}</h3>
+                            <div class="article-meta">
+                                <span class="date">{{ $article->created_at->diffForHumans() }}</span>
+                                <span class="read-time">5 min read</span>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </div>
+@endsection

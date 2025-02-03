@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        <a href="#"><i class="fas fa-user"></i>Profile</a>
+                        <a href="{{ route('showProfile') }}"><i class="fas fa-user"></i>Profile</a>
                         <hr>
                         <form method="post" action="{{ route('logout') }}" id="logout-form">
                             @csrf

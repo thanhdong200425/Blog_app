@@ -85,9 +85,6 @@
                                     <img src="{{ asset('icons/comment-icon.svg') }}" alt="comment icon" />
                                     {{ $article->comments->count() ?? 0 }}
                                 </span>
-                                <span class="bookmark-icon">
-                                    <img src="{{ asset('icons/bookmark-icon.svg') }}" alt="bookmark icon" />14
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -124,11 +121,7 @@
     <div class="comment-container">
         <div class="comment-wrapper">
             <div class="comment-header">
-                <h3>Comments (24)</h3>
-                <div class="comment-sort">
-                    <button class="sort-btn active">Top</button>
-                    <button class="sort-btn">Latest</button>
-                </div>
+                <h3>Comments ({{ $article->comments->count() }})</h3>
             </div>
 
             {{-- Comment input part --}}

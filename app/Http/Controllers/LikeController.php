@@ -54,21 +54,22 @@ class LikeController extends Controller
         try {
             $validatedResult = $request->validate([
                 'entityId' => ['required', 'integer'],
+                'type' => ['required']
             ]);
 
             // Find the article and delete like of it
-            $article = Article::find($validatedResult['entityId']);
-            $likeArticle = $article->likes()->where('user_id', Auth::id())->first();
+            $model = $validatedResult['type'] == 'article' ? Article::find($validatedResult['entityId']) : Comment::find($validatedResult['entityId']);
+            $likesModel = $model->likes()->where('user_id', Auth::id())->first();
 
             // Check whether a user has liked the article
-            if (!$likeArticle)
+            if ($validatedResult['type'] == 'article' && !$likesModel)
                 return response()->json(['error' => 'You have not liked this post yet'], 400);
 
-            $likeArticle->delete();
+            $likesModel->delete();
 
             // Decrement like quantity
-            $article->likeQuantity()->update([
-                'quantity' => $article->likeQuantity()->first()->quantity - 1
+            $model->likeQuantity()->update([
+                'quantity' => $model->likeQuantity()->first()->quantity - 1
             ]);
 
             return response()->json(['liked' => false]);

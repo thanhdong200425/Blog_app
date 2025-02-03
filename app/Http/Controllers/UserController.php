@@ -79,4 +79,9 @@ class UserController extends Controller
 
         return redirect()->route('signIn')->with('success', 'Logout successfully');
     }
+
+    public function show()
+    {
+        return view('main.profile', ['user' => Auth::user(), 'articles' => Auth::user()->articles]);
+    }
 }
