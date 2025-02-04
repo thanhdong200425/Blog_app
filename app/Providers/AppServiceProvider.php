@@ -24,10 +24,10 @@ class AppServiceProvider extends ServiceProvider
         View::composer('main.home', function ($view) {
             $user = Auth::user();
             $view->with([
-                'avatarSrc' => $user->image_url ? $user->image_url : "https://picsum.photos/200/300",
-                'userName' => "{$user->first_name} {$user->last_name}",
-                // Add more parameters as needed
+                'avatarSrc' => $user ? $user->image_url : null,
+                'userName' => $user ? "{$user->first_name} {$user->last_name}" : null,
             ]);
+
         });
     }
 }

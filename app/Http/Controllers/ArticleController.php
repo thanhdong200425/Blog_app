@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
@@ -15,7 +16,7 @@ class ArticleController extends Controller
         return view('main.post.list-article', ['articles' => $articles, 'latestArticles' => $latestArticles]);
     }
 
-    public function show($slug, $id)
+    public function show($slug)
     {
         $article = Article::with([
             'author',
@@ -23,8 +24,7 @@ class ArticleController extends Controller
                 $query->orderBy('path', 'asc');
             },
             'comments.author'
-        ])->where('id', $id)->first();
-
+        ])->where('slug', $slug)->first();
         return view('main.post.article', ['article' => $article]);
     }
 
@@ -50,7 +50,8 @@ class ArticleController extends Controller
         $newArticle = Article::create([
             'title' => $title,
             'content' => $content,
-            'user_id' => $user->id
+            'user_id' => $user->id,
+            'slug' => Str::slug($validateData['title'])
         ]);
 
         return redirect()->route('main')->with('success', 'Added post successfully');

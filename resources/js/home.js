@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    if (!document.querySelector('meta[name="user-id"]').getAttribute("content")) return;
     setActiveStateFromCurrentUrl();
     setEventForModal();
     setEventForLogoutButton();

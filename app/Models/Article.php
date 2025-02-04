@@ -36,5 +36,5 @@ class Article extends Model
         return $this->hasMany(Comment::class, 'article_id');
     }
 
-    protected $fillable = ['user_id', 'title', 'content'];
+    protected $fillable = ['user_id', 'title', 'content', 'slug'];
 }

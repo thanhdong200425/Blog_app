@@ -37,26 +37,30 @@
                 <a href="#" class="info-icon">
                     <img src="{{ asset('icons/info-icon.svg') }}" alt="Info" id="info">
                 </a>
-                <a href="#" class="avatar-button">
-                    <img src="{{ $avatarSrc }}" alt="Avatar source" />
-                </a>
-                <div class="user-modal" id="userModal">
-                    <div class="modal-header">
-                        <img src="{{ $avatarSrc }}" alt="User Avatar" />
-                        <div class="user-info">
-                            <h4>{{ $userName }}</h4>
+                @if (Auth::check())
+                    <a href="#" class="avatar-button">
+                        <img src="{{ $avatarSrc }}" alt="Avatar source" />
+                    </a>
+                    <div class="user-modal" id="userModal">
+                        <div class="modal-header">
+                            <img src="{{ $avatarSrc }}" alt="User Avatar" />
+                            <div class="user-info">
+                                <h4>{{ $userName }}</h4>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <a href="{{ route('showProfile') }}"><i class="fas fa-user"></i>Profile</a>
+                            <hr>
+                            <form method="post" action="{{ route('logout') }}" id="logout-form">
+                                @csrf
+                                <a href="#" class="logout" id="logout"><i class="fas fa-sign-out-alt"></i>Log
+                                    Out</a>
+                            </form>
                         </div>
                     </div>
-                    <div class="modal-body">
-                        <a href="{{ route('showProfile') }}"><i class="fas fa-user"></i>Profile</a>
-                        <hr>
-                        <form method="post" action="{{ route('logout') }}" id="logout-form">
-                            @csrf
-                            <a href="#" class="logout" id="logout"><i class="fas fa-sign-out-alt"></i>Log
-                                Out</a>
-                        </form>
-                    </div>
-                </div>
+                @else
+                    <a href="{{ route('signIn') }}" class="auth-button">Sign in</a>
+                @endif
             </div>
         </div>
     </header>

@@ -66,7 +66,7 @@
                         <div class="info">
                             <p>Created at {{ $article->created_at->format('M jS, Y h:i A') }}</p>
                             <div class="article-statistical">
-                                @if (Auth::user()->id == $article->author->id)
+                                @if (Auth::check() && Auth::user()->id == $article->author->id)
                                     <form method="post" action="{{ route('deleteArticle') }}" id="delete-form-article">
                                         @csrf
                                         <input type="hidden" name="articleId" value="{{ $article->id }}" />
@@ -125,20 +125,21 @@
             </div>
 
             {{-- Comment input part --}}
-            <div class="comment-input">
-                <div class="user-avatar">
-                    <img src="https://picsum.photos/200/200" alt="User avatar" />
-                </div>
-                <div class="input-wrapper">
-                    <textarea placeholder="Write a comment..." name="content" id="content" required></textarea>
-                    <input type="hidden" name="article_id" value="{{ $article->id }}" />
-                    <input type="hidden" name="url" value="{{ route('comment') }}" />
-                    <div class="input-actions">
-                        <button class="cancel-btn">Cancel</button>
-                        <button class="submit-btn">Comment</button>
+            @if (Auth::check())
+                <div class="comment-input">
+                    <div class="user-avatar">
+                        <img src="https://picsum.photos/200/200" alt="User avatar" />
+                    </div>
+                    <div class="input-wrapper">
+                        <textarea placeholder="Write a comment..." name="content" id="content" required></textarea>
+                        <input type="hidden" name="article_id" value="{{ $article->id }}" />
+                        <input type="hidden" name="url" value="{{ route('comment') }}" />
+                        <div class="input-actions">
+                            <button class="submit-btn">Comment</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
 
             <div class="comments-list">
@@ -187,21 +188,25 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="reply-section">
-                                <div class="reply-input-wrapper">
-                                    <div class="user-avatar">
-                                        <img src="{{ Auth::user()->image_url }}" alt="Your avatar" />
-                                    </div>
-                                    <div class="reply-content">
-                                        <textarea placeholder="Write a reply..."></textarea>
-                                        <input type="hidden" name="comment_id" value="{{ $comment->id }}" />
-                                        <div class="reply-actions">
-                                            <button class="reply-cancel">Cancel</button>
-                                            <button class="reply-submit">Reply</button>
+                            @if (Auth::check())
+                                <div class="reply-section">
+                                    <div class="reply-input-wrapper">
+
+                                        <div class="user-avatar">
+                                            <img src="{{ Auth::user()->image_url }}" alt="Your avatar" />
+                                        </div>
+
+                                        <div class="reply-content">
+                                            <textarea placeholder="Write a reply..."></textarea>
+                                            <input type="hidden" name="comment_id" value="{{ $comment->id }}" />
+                                            <div class="reply-actions">
+                                                <button class="reply-cancel">Cancel</button>
+                                                <button class="reply-submit">Reply</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 @endforeach

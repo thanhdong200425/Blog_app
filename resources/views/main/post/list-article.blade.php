@@ -36,7 +36,7 @@
         <div class="column left">
             @foreach ($articles as $article)
                 <div class="card"
-                    onclick="window.location.href='{{ route('article', ['slug' => Str::slug($article->title), 'id' => $article->id]) }}'">
+                    onclick="window.location.href='{{ route('article', ['slug' => Str::slug($article->title)]) }}'">
                     {{-- Avatar --}}
                     <div class="avatar">
                         <img src="{{ $article->author->image_url }}" />

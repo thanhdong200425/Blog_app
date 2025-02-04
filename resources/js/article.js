@@ -1,5 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
 
+const userTag = document.querySelector('meta[name="user-id"]');
+
 document.addEventListener("DOMContentLoaded", function () {
     const isOwner = document.querySelector('input[name="isOwner"]');
     if (isOwner) {
@@ -77,6 +79,7 @@ const handleSubmitForm = () => {
 };
 
 const setEventForCommentButton = () => {
+    if (!userTag.getAttribute("content")) return;
     document.querySelector(".submit-btn").addEventListener("click", async (e) => {
         try {
             e.preventDefault();
@@ -197,6 +200,11 @@ function setupReplyHandlers(commentElement) {
     const replyTextarea = commentElement.querySelector(".reply-content textarea");
 
     replyTrigger.addEventListener("click", () => {
+        if (!userTag.getAttribute("content")) {
+            showLoginPrompt();
+            return;
+        }
+
         document.querySelectorAll(".reply-section.active").forEach((section) => {
             if (section !== replySection) {
                 section.classList.remove("active");
@@ -208,30 +216,37 @@ function setupReplyHandlers(commentElement) {
         }
     });
 
-    replyCancel.addEventListener("click", () => {
-        replySection.classList.remove("active");
-        replyTextarea.value = "";
-    });
-
-    replySubmit.addEventListener("click", async (e) => {
-        try {
-            const replyContent = replyTextarea.value.trim(),
-                parentCommentId = commentElement.dataset.id,
-                articleId = document.querySelector('input[name="article_id"]').value,
-                url = document.querySelector('input[name="url"]').value,
-                parentComponent = e.target.closest(".comment-item");
-
-            if (!replyContent) return;
-
-            const newComment = await addAComment(url, replyContent, articleId, parentCommentId);
-            replyTextarea.value = "";
+    userTag.getAttribute("content") &&
+        replyCancel.addEventListener("click", () => {
             replySection.classList.remove("active");
-            createCommentComponent(newComment.data, parentComponent);
-            updateCommentQuantity();
-        } catch (error) {
-            console.log("Error when hit reply button: " + error);
-        }
-    });
+            replyTextarea.value = "";
+        });
+
+    userTag.getAttribute("content") &&
+        replySubmit.addEventListener("click", async (e) => {
+            try {
+                if (!userTag.getAttribute("content")) {
+                    showLoginPrompt();
+                    return;
+                }
+
+                const replyContent = replyTextarea.value.trim(),
+                    parentCommentId = commentElement.dataset.id,
+                    articleId = document.querySelector('input[name="article_id"]').value,
+                    url = document.querySelector('input[name="url"]').value,
+                    parentComponent = e.target.closest(".comment-item");
+
+                if (!replyContent) return;
+
+                const newComment = await addAComment(url, replyContent, articleId, parentCommentId);
+                replyTextarea.value = "";
+                replySection.classList.remove("active");
+                createCommentComponent(newComment.data, parentComponent);
+                updateCommentQuantity();
+            } catch (error) {
+                console.log("Error when hit reply button: " + error);
+            }
+        });
 }
 
 function setupCommentActionPopup(commentElement) {
@@ -281,6 +296,10 @@ function setupCommentActionPopup(commentElement) {
 // Set event for like button (article)
 const setEventForLikeButton = (className, likeClassName, unlikeClassName, figureClassName) => {
     document.querySelector(className).addEventListener("click", (e) => {
+        if (!userTag.getAttribute("content")) {
+            showLoginPrompt();
+            return;
+        }
         const entityId = parseInt(e.currentTarget.dataset.entityId),
             route = e.currentTarget.dataset.url;
         toggleLike(route, entityId, "article", likeClassName, unlikeClassName, figureClassName);
@@ -290,6 +309,10 @@ const setEventForLikeButton = (className, likeClassName, unlikeClassName, figure
 // Set event for like button (comment)
 const setCommentLikeHandlers = (button) => {
     button.addEventListener("click", (e) => {
+        if (!userTag.getAttribute("content")) {
+            showLoginPrompt();
+            return;
+        }
         const commentId = parseInt(e.currentTarget.dataset.id);
         const likeRoute = e.currentTarget.classList.contains("active") ? document.querySelector("span.downvote").dataset.url : document.querySelector("span.upvote").dataset.url;
 
@@ -349,6 +372,36 @@ const showToast = (message) => {
         const toastElement = document.querySelector(".error-message");
         if (toastElement) document.body.removeChild(toastElement);
     }, 6000);
+};
+
+const showLoginPrompt = () => {
+    const prompt = `
+        <div class="login-prompt-overlay"></div>
+        <div class="login-prompt-modal">
+            <div class="login-prompt-content">
+                <img src="/icons/lock-icon.svg" alt="Lock" class="lock-icon" />
+                <h3>Sign in required</h3>
+                <p>Please sign in to perform this action</p>
+                <div class="login-prompt-actions">
+                    <button class="login-prompt-cancel">Cancel</button>
+                    <button class="login-prompt-signin" onclick="window.location.href='/sign-in'">Sign in</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", prompt);
+
+    const overlay = document.querySelector(".login-prompt-overlay");
+    const modal = document.querySelector(".login-prompt-modal");
+    const cancelBtn = document.querySelector(".login-prompt-cancel");
+
+    const closePrompt = () => {
+        overlay.remove();
+        modal.remove();
+    };
+
+    overlay.addEventListener("click", closePrompt);
+    cancelBtn.addEventListener("click", closePrompt);
 };
 
 const removeAllRelatedComment = (commentElement) => {
