@@ -123,14 +123,6 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
     newCommentPart.classList.add("comment-item");
     newCommentPart.style.marginLeft = `${Math.min(newCommentData.path.split(".").length - 1, 3) * 60}px`;
     newCommentPart.dataset.id = newCommentData.id;
-    const deleteButton =
-        currentUserId == newCommentData.user_id &&
-        `<div class="comment-action-popup">
-            <div class="action-item delete-comment">
-                <img src="/icons/delete-icon.svg" alt="Delete" />
-                <span>Delete</span>
-            </div>
-        </div>`;
     newCommentPart.innerHTML = `
                         <div class="comment-user">
                             <img src="${newCommentData.author.image_url}" alt="Commenter avatar" />
@@ -145,7 +137,12 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
                                     <button class="action-btn">
                                         <img src="/icons/dots-icon.svg" alt="More actions" />
                                     </button>
-                                    ${deleteButton && deleteButton}
+                                   <div class="comment-action-popup">
+                                <div class="action-item delete-comment">
+                                    <img src="/icons/delete-icon.svg" alt="Delete" />
+                                    <span>Delete</span>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
                             <p>${newCommentData.content}</p>
@@ -179,8 +176,17 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
     `;
     setupReplyHandlers(newCommentPart);
     setCommentLikeHandlers(newCommentPart.querySelector(".reaction-btn"));
-    if (currentUserId == newCommentData.user_id) setupCommentActionPopup(newCommentPart);
-    targetComment && targetComment.parentNode ? targetComment.parentNode.insertBefore(newCommentPart, targetComment.nextSibling) : listComment.appendChild(newCommentPart);
+    setupCommentActionPopup(newCommentPart);
+    if (targetComment) {
+        let insertAfter = targetComment;
+        let nextElement = targetComment.nextElementSibling;
+        while (nextElement) {
+            if ((parseInt(nextElement.style.marginLeft) || 0) <= parseInt(targetComment.style.marginLeft)) break;
+            insertAfter = nextElement;
+            nextElement = nextElement.nextElementSibling;
+        }
+        insertAfter.nextElementSibling ? insertAfter.parentNode.insertBefore(newCommentPart, insertAfter.nextElementSibling) : listComment.appendChild(newCommentPart);
+    } else listComment.appendChild(newCommentPart);
 };
 
 function setupReplyHandlers(commentElement) {
@@ -218,6 +224,7 @@ function setupReplyHandlers(commentElement) {
             if (!replyContent) return;
 
             const newComment = await addAComment(url, replyContent, articleId, parentCommentId);
+            replyTextarea.value = "";
             replySection.classList.remove("active");
             createCommentComponent(newComment.data, parentComponent);
             updateCommentQuantity();
