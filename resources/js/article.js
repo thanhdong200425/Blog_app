@@ -119,9 +119,18 @@ const addAComment = async (url, content, articleId, parentId = null) => {
 const createCommentComponent = (newCommentData, targetComment = null) => {
     const listComment = document.querySelector(".comments-list");
     const newCommentPart = document.createElement("div");
+    const currentUserId = document.querySelector('meta[name="user-id"]').getAttribute("content");
     newCommentPart.classList.add("comment-item");
     newCommentPart.style.marginLeft = `${Math.min(newCommentData.path.split(".").length - 1, 3) * 60}px`;
     newCommentPart.dataset.id = newCommentData.id;
+    const deleteButton =
+        currentUserId == newCommentData.user_id &&
+        `<div class="comment-action-popup">
+            <div class="action-item delete-comment">
+                <img src="/icons/delete-icon.svg" alt="Delete" />
+                <span>Delete</span>
+            </div>
+        </div>`;
     newCommentPart.innerHTML = `
                         <div class="comment-user">
                             <img src="${newCommentData.author.image_url}" alt="Commenter avatar" />
@@ -136,12 +145,7 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
                                     <button class="action-btn">
                                         <img src="/icons/dots-icon.svg" alt="More actions" />
                                     </button>
-                                    <div class="comment-action-popup">
-                                        <div class="action-item delete-comment">
-                                            <img src="/icons/delete-icon.svg" alt="Delete" />
-                                            <span>Delete</span>
-                                        </div>
-                                    </div>
+                                    ${deleteButton && deleteButton}
                                 </div>
                             </div>
                             <p>${newCommentData.content}</p>
@@ -175,7 +179,7 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
     `;
     setupReplyHandlers(newCommentPart);
     setCommentLikeHandlers(newCommentPart.querySelector(".reaction-btn"));
-    setupCommentActionPopup(newCommentPart);
+    if (currentUserId == newCommentData.user_id) setupCommentActionPopup(newCommentPart);
     targetComment && targetComment.parentNode ? targetComment.parentNode.insertBefore(newCommentPart, targetComment.nextSibling) : listComment.appendChild(newCommentPart);
 };
 
@@ -227,6 +231,8 @@ function setupCommentActionPopup(commentElement) {
     const actionBtn = commentElement.querySelector(".action-btn");
     const actionPopup = commentElement.querySelector(".comment-action-popup");
     const deleteAction = commentElement.querySelector(".delete-comment");
+
+    if (!actionBtn && !actionPopup && !deleteAction) return;
 
     // Toggle popup when clicking action button
     actionBtn.addEventListener("click", (e) => {
