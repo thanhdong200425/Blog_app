@@ -26,7 +26,6 @@ class ArticleController extends Controller
         ])->where('id', $id)->first();
 
         return view('main.post.article', ['article' => $article]);
-
     }
 
     public function showAskingPage()
@@ -36,7 +35,6 @@ class ArticleController extends Controller
 
     public function create(Request $request)
     {
-
         $validateData = $request->validate([
             'title' => 'required',
             'content' => 'required'

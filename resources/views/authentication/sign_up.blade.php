@@ -13,7 +13,7 @@
         <div class="icon-container">
             <img src="{{ asset('icons/person-icon.svg') }}" alt="Icon" />
         </div>
-        <input type="text" placeholder="Username" name="username" value="{{ old('username') }}" required autocomplete="off" />
+        <input type="email" placeholder="Email" name="email" value="{{ old('email') }}" required autocomplete="off" />
     </div>
 
     <div class="input-field" id="password-field">

@@ -86,6 +86,7 @@ const setEventForCommentButton = () => {
             const newComment = await addAComment(url, contentPart.value.trim(), articleId);
             contentPart.value = "";
             createCommentComponent(newComment.data);
+            updateCommentQuantity();
         } catch (error) {
             console.log("Error in setCommentButton: " + error);
         }
@@ -128,7 +129,7 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
                         <div class="comment-content">
                             <div class="comment-header">
                                 <div class="user-info">
-                                    <h4>${newCommentData.author.username}</h4>
+                                    <h4>${newCommentData.author.first_name} ${newCommentData.author.last_name}</h4>
                                     <span class="time">${formatDistanceToNow(new Date(newCommentData.created_at))}</span>
                                 </div>
                                 <div class="comment-actions">
@@ -215,6 +216,7 @@ function setupReplyHandlers(commentElement) {
             const newComment = await addAComment(url, replyContent, articleId, parentCommentId);
             replySection.classList.remove("active");
             createCommentComponent(newComment.data, parentComponent);
+            updateCommentQuantity();
         } catch (error) {
             console.log("Error when hit reply button: " + error);
         }
@@ -247,8 +249,6 @@ function setupCommentActionPopup(commentElement) {
 
     // Handle delete action
     deleteAction.addEventListener("click", async () => {
-        // TODO: Add your delete comment API call here
-        console.log("Delete comment:", commentElement.dataset.id);
         const response = await fetch("http://127.0.0.1:8000/main/delete-comment", {
             method: "POST",
             headers: {
@@ -261,7 +261,7 @@ function setupCommentActionPopup(commentElement) {
         });
 
         const result = await response.json();
-        commentElement.remove();
+        if (result.delete) removeAllRelatedComment(commentElement);
     });
 }
 
@@ -336,4 +336,24 @@ const showToast = (message) => {
         const toastElement = document.querySelector(".error-message");
         if (toastElement) document.body.removeChild(toastElement);
     }, 6000);
+};
+
+const removeAllRelatedComment = (commentElement) => {
+    const currentMargin = parseInt(commentElement.style.marginLeft) || 0;
+    const elementsToRemove = [commentElement];
+    let nextElement = commentElement.nextElementSibling;
+    while (nextElement) {
+        const nextMargin = parseInt(nextElement.style.marginLeft) || 0;
+        if (nextMargin <= currentMargin) break; // Because the sub-comment has margin-left greater than the parent-comment
+        elementsToRemove.push(nextElement);
+        nextElement = nextElement.nextElementSibling;
+    }
+    elementsToRemove.forEach((element) => element.remove());
+    const commentCountElement = document.querySelector(".comment-header h3");
+    commentCountElement.textContent = `Comments (${parseInt(commentCountElement.textContent.match(/\d+/)[0]) - elementsToRemove.length})`;
+};
+
+const updateCommentQuantity = () => {
+    const commentCount = document.querySelector(".comment-header h3");
+    commentCount.textContent = `Comment (${document.querySelector(".comments-list").children.length})`;
 };

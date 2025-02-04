@@ -46,7 +46,7 @@
                     <div class="content">
                         {{-- Top --}}
                         <div class="top-content">
-                            <p>{{ $article->author->username }}
+                            <p>{{ $article->author->first_name . ' ' . $article->author->last_name }}
                                 <span>{{ $article->created_at->diffForHumans() }}</span>
                                 <span>
                                     <img src="/icons/url-icon.svg" alt="url copy" />
@@ -111,7 +111,7 @@
                             <span>{{ $article->likeQuantity()->exists() ? $article->likeQuantity()->first()->quantity : 0 }}</span>
                         </span>
                     </div>
-                    <span>{{ $article->author->username }}</span>
+                    <span>{{ $article->author->first_name . ' ' . $article->author->last_name }}</span>
                 </div>
             @endforeach
 

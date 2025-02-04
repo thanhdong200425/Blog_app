@@ -46,7 +46,7 @@
                             <div class="title">
                                 <div class="author-name">
                                     <p>{{ $article->author->first_name }} {{ $article->author->last_name }}</p>
-                                    <span>@ {{ $article->author->username }}</span>
+                                    <span> {{ $article->author->email }}</span>
                                 </div>
                                 <div class="author-statistical">
                                     <span class="star">
@@ -156,7 +156,7 @@
                         <div class="comment-content">
                             <div class="comment-header">
                                 <div class="user-info">
-                                    <h4>{{ $comment->author->username }}</h4>
+                                    <h4>{{ $comment->author->first_name . ' ' . $comment->author->last_name }}</h4>
                                     <span class="time">{{ $comment->created_at->diffForHumans() }}</span>
                                 </div>
                                 <div class="comment-actions">

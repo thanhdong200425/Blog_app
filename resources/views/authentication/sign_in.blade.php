@@ -25,7 +25,7 @@
         <div class="icon-container">
             <img src="{{ asset('icons/person-icon.svg') }}" alt="Icon" />
         </div>
-        <input type="text" placeholder="Username" name="username" required />
+        <input type="email" placeholder="Email" name="email" required />
     </div>
 
     <div class="input-field">

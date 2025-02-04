@@ -16,16 +16,16 @@ class UserController extends Controller
     {
         // Validate user inputs
         $validateResult = self::validateUserInputs($request, [
-            'username' => ['required', 'exists:users,username'],
+            'email' => ['required', 'email', 'exists:users,email'],
             'password' => ['required']
         ], 'signIn');
 
         if ($validateResult instanceof RedirectResponse)
             return $validateResult;
 
-        $credentials = $request->only('username', 'password');
+        $credentials = $request->only('email', 'password');
 
-        // Get user by retrieve username
+        // Get user by retrieve email
         if (!Auth::attempt($credentials))
             return redirect()->route('signIn')->withErrors(['error' => 'Your password is not correct']);
 
@@ -39,7 +39,7 @@ class UserController extends Controller
     {
         // Validate user inputs
         $validateResult = self::validateUserInputs($request, [
-            'username' => ['required', 'unique:App\Models\User,username'],
+            'email' => ['required', 'email', 'unique:App\Models\User,email'],
             'password' => ['required'],
             'confirmPassword' => ['required', 'same:password']
         ], 'signUp');
@@ -48,13 +48,13 @@ class UserController extends Controller
             return $validateResult;
 
         // Get info from validated data
-        $username = $validateResult['username'];
+        $username = $validateResult['email'];
         $password = $validateResult['password'];
 
 
         // Create a new User and add it into database
         $user = User::create([
-            'username' => $username,
+            'email' => $username,
             'hashed_password' => Hash::make($password, ['rounds' => 12])
         ]);
 
