@@ -18,7 +18,7 @@
                 <div class="preview">
                     <img src="{{ $user->image_url }}" alt="Profile picture" id="preview-image">
                 </div>
-                <input type="file" name="image_url" id="image_url" accept="image/*" onchange="previewImage(this)">
+                <input type="file" name="image" id="image_url" accept="image/*">
                 <label for="image_url" class="upload-label">Choose Image</label>
             </div>
 
@@ -40,16 +40,8 @@
             <button type="submit">Update Profile</button>
         </form>
     </div>
+@endsection
 
-    <script>
-        function previewImage(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('preview-image').src = e.target.result;
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
+@section('scripts')
+    @vite('resources/js/updateProfile.js')
 @endsection

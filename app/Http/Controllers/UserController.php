@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -93,21 +94,38 @@ class UserController extends Controller
     public function save(Request $request)
     {
         $user = Auth::user();
-        if (!$user) {
+        if (!$user)
             return redirect()->route('signIn');
-        }
 
         // Validate request data
         $validatedData = $request->validate([
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date',
+            'image' => 'nullable|image|max:2000'
         ]);
 
-        // Update user profile
-        $user->fill($validatedData)->save();
+        if ($request->hasFile('image'))
+            $user->image_url = $this::uploadFile($validatedData['image'], $user->image_url);
 
-        return redirect()->route('showProfile')->with('success', 'Profile updated successfully');
+        // Update user profile
+        $user->fill($validatedData);
+        if ($user->isDirty()) {
+            $user->save();
+            return redirect()->route('showProfile')->with('success', 'Profile updated successfully');
+        }
+        return redirect()->back()->with('error', "No change were maded");
+    }
+
+    public static function uploadFile($imageFile, $oldImagePath = null)
+    {
+        if ($oldImagePath) {
+            $relativePathOfOldImage = str_replace(asset('storage'), '', $oldImagePath);
+            Storage::disk('public')->delete($relativePathOfOldImage);
+        }
+        $filePath = $imageFile->store('uploads', 'public');
+        $fileUrl = asset('storage/' . $filePath);
+        return $fileUrl;
     }
 
 }
