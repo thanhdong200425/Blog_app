@@ -18,7 +18,7 @@
                 <div class="preview">
                     <img src="{{ $user->image_url }}" alt="Profile picture" id="preview-image">
                 </div>
-                <input type="file" name="image" id="image_url" accept="image/*">
+                <input type="file" name="image_url" id="image_url" accept="image/*">
                 <label for="image_url" class="upload-label">Choose Image</label>
             </div>
 

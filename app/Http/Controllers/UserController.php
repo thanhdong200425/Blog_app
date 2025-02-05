@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contract\UserRepositoryInterface;
 use App\Models\Session;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    private UserRepositoryInterface $userRepository;
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
     public function signIn(Request $request)
     {
         // Validate user inputs
@@ -94,27 +100,21 @@ class UserController extends Controller
     public function save(Request $request)
     {
         $user = Auth::user();
-        if (!$user)
+        if (!Auth::check())
             return redirect()->route('signIn');
-
         // Validate request data
         $validatedData = $request->validate([
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date',
-            'image' => 'nullable|image|max:2000'
+            'image_url' => 'nullable|image|max:2000'
         ]);
-
-        if ($request->hasFile('image'))
-            $user->image_url = $this::uploadFile($validatedData['image'], $user->image_url);
-
-        // Update user profile
-        $user->fill($validatedData);
-        if ($user->isDirty()) {
-            $user->save();
+        if ($validatedData['image_url'])
+            $validatedData['image_url'] = $this::uploadFile($validatedData['image_url'], $user->image_url);
+        $updateResult = $this->userRepository->update($user->id, $validatedData);
+        if ($updateResult)
             return redirect()->route('showProfile')->with('success', 'Profile updated successfully');
-        }
-        return redirect()->back()->with('error', "No change were maded");
+        return redirect()->route('showProfile')->with('error', "No change were maded");
     }
 
     public static function uploadFile($imageFile, $oldImagePath = null)
