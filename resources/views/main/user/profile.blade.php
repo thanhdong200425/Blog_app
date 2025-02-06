@@ -75,7 +75,7 @@
                     @endphp
                     <article class="article-card"
                         onclick="window.location.href='{{ route('article', ['slug' => Str::slug($article->title), 'id' => $article->id]) }}'">
-                        <img src="{{ $matches[1] }}" alt="Article thumbnail">
+                        <img src="{{ $matches[1] ?? 'https://picsum.photos/200/300' }}" alt="Article thumbnail">
                         <div class="article-content">
                             <h3>{{ $article->title }}</h3>
                             <div class="article-meta">

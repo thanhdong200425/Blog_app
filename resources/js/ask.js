@@ -1,6 +1,5 @@
 const {
     ClassicEditor,
-    Alignment,
     Autoformat,
     AutoImage,
     AutoLink,
@@ -10,22 +9,17 @@ const {
     BlockToolbar,
     Bold,
     Bookmark,
-    CKBox,
-    CKBoxImageEdit,
     CloudServices,
     Code,
     CodeBlock,
     Essentials,
     FindAndReplace,
-    GeneralHtmlSupport,
     Heading,
+    Highlight,
     HorizontalLine,
-    HtmlComment,
-    HtmlEmbed,
     ImageBlock,
     ImageCaption,
     ImageInline,
-    ImageInsert,
     ImageInsertViaUrl,
     ImageResize,
     ImageStyle,
@@ -39,14 +33,7 @@ const {
     LinkImage,
     List,
     ListProperties,
-    Markdown,
-    MediaEmbed,
-    Mention,
     Paragraph,
-    PasteFromMarkdownExperimental,
-    PasteFromOffice,
-    PictureEditing,
-    ShowBlocks,
     SpecialCharacters,
     SpecialCharactersArrows,
     SpecialCharactersCurrency,
@@ -54,84 +41,25 @@ const {
     SpecialCharactersLatin,
     SpecialCharactersMathematical,
     SpecialCharactersText,
-    Style,
+    Strikethrough,
     Table,
-    TableCaption,
     TableCellProperties,
-    TableColumnResize,
     TableProperties,
     TableToolbar,
     TextTransformation,
-    Title,
     TodoList,
-    WordCount,
+    Underline,
 } = window.CKEDITOR;
-const { AIAssistant, CaseChange, ExportPdf, ExportWord, FormatPainter, ImportWord, MergeFields, MultiLevelList, OpenAITextAdapter, PasteFromOfficeEnhanced, SlashCommand, Template } = window.CKEDITOR_PREMIUM_FEATURES;
+const { CaseChange, FormatPainter, Template } = window.CKEDITOR_PREMIUM_FEATURES;
 
-const LICENSE_KEY = "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3Mzg3OTk5OTksImp0aSI6IjllMTgyYWU1LTNlZWQtNDNlNC05NTljLWIwOGRhNmNlNWM4MSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6ImIyMjFiOTk4In0.HtjPx5jomuvu-aSEU9dm66NE7fSbsfzECTa9TbgPEUToW12yRlcUgVhXdAph0kOKzkUOtcBqqQNM4ekg3LQeXQ";
-
-/**
- * USE THIS INTEGRATION METHOD ONLY FOR DEVELOPMENT PURPOSES.
- *
- * This sample is configured to use OpenAI API for handling AI Assistant queries.
- * See: https://ckeditor.com/docs/ckeditor5/latest/features/ai-assistant/ai-assistant-integration.html
- * for a full integration and customization guide.
- */
-const AI_API_KEY = "test";
-
-const CLOUD_SERVICES_TOKEN_URL = "https://v4j042b7775i.cke-cs.com/token/dev/8dfecd7c093cf6b467e462e6b5e719c8911d786469eee6f876dbbe000f93?limit=10";
+const LICENSE_KEY = "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NDAwOTU5OTksImp0aSI6ImE2Yjk1YTAxLWI4ZDEtNDQ0Ni04Mzc0LTQzNDA4ZWJlMTc0ZCIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6ImZlNzE3M2Y1In0.Pz3uA6Jg13DlM27yIe6bup0liLMedl7sKHJKPKyjtYYao18d2VleEu-pEptRfqSHVOYstbeYKaNNDmBvMgDDmg";
 
 const editorConfig = {
     toolbar: {
-        items: [
-            "insertMergeField",
-            "previewMergeFields",
-            "|",
-            "aiCommands",
-            "aiAssistant",
-            "|",
-            "importWord",
-            "exportWord",
-            "exportPdf",
-            "showBlocks",
-            "formatPainter",
-            "caseChange",
-            "findAndReplace",
-            "|",
-            "heading",
-            "style",
-            "|",
-            "bold",
-            "italic",
-            "code",
-            "|",
-            "specialCharacters",
-            "horizontalLine",
-            "link",
-            "bookmark",
-            "insertImage",
-            "ckbox",
-            "mediaEmbed",
-            "insertTable",
-            "insertTemplate",
-            "blockQuote",
-            "codeBlock",
-            "htmlEmbed",
-            "|",
-            "alignment",
-            "|",
-            "bulletedList",
-            "numberedList",
-            "multiLevelList",
-            "todoList",
-            "outdent",
-            "indent",
-        ],
+        items: ["formatPainter", "|", "heading", "|", "bold", "italic", "underline", "|", "link", "insertTable", "highlight", "blockQuote", "codeBlock", "|", "bulletedList", "numberedList", "todoList", "outdent", "indent"],
         shouldNotGroupWhenFull: false,
     },
     plugins: [
-        AIAssistant,
-        Alignment,
         Autoformat,
         AutoImage,
         AutoLink,
@@ -142,32 +70,24 @@ const editorConfig = {
         Bold,
         Bookmark,
         CaseChange,
-        CKBox,
-        CKBoxImageEdit,
         CloudServices,
         Code,
         CodeBlock,
         Essentials,
-        ExportPdf,
-        ExportWord,
         FindAndReplace,
         FormatPainter,
-        GeneralHtmlSupport,
         Heading,
+        Highlight,
         HorizontalLine,
-        HtmlComment,
-        HtmlEmbed,
         ImageBlock,
         ImageCaption,
         ImageInline,
-        ImageInsert,
         ImageInsertViaUrl,
         ImageResize,
         ImageStyle,
         ImageTextAlternative,
         ImageToolbar,
         ImageUpload,
-        ImportWord,
         Indent,
         IndentBlock,
         Italic,
@@ -175,19 +95,7 @@ const editorConfig = {
         LinkImage,
         List,
         ListProperties,
-        Markdown,
-        MediaEmbed,
-        Mention,
-        MergeFields,
-        MultiLevelList,
-        OpenAITextAdapter,
         Paragraph,
-        PasteFromMarkdownExperimental,
-        PasteFromOffice,
-        PasteFromOfficeEnhanced,
-        PictureEditing,
-        ShowBlocks,
-        SlashCommand,
         SpecialCharacters,
         SpecialCharactersArrows,
         SpecialCharactersCurrency,
@@ -195,74 +103,18 @@ const editorConfig = {
         SpecialCharactersLatin,
         SpecialCharactersMathematical,
         SpecialCharactersText,
-        Style,
+        Strikethrough,
         Table,
-        TableCaption,
         TableCellProperties,
-        TableColumnResize,
         TableProperties,
         TableToolbar,
         Template,
         TextTransformation,
-        Title,
         TodoList,
-        WordCount,
+        Underline,
     ],
-    ai: {
-        openAI: {
-            requestHeaders: {
-                Authorization: "Bearer " + AI_API_KEY,
-            },
-        },
-    },
-
-    balloonToolbar: ["aiAssistant", "|", "bold", "italic", "|", "link", "insertImage", "|", "bulletedList", "numberedList"],
-    blockToolbar: ["aiCommands", "aiAssistant", "|", "bold", "italic", "|", "link", "insertImage", "insertTable", "|", "bulletedList", "numberedList", "outdent", "indent"],
-    cloudServices: {
-        tokenUrl: CLOUD_SERVICES_TOKEN_URL,
-    },
-    exportPdf: {
-        stylesheets: [
-            /* This path should point to application stylesheets. */
-            /* See: https://ckeditor.com/docs/ckeditor5/latest/features/converters/export-pdf.html */
-            "./style.css",
-            /* Export PDF needs access to stylesheets that style the content. */
-            "https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.css",
-            "https://cdn.ckeditor.com/ckeditor5-premium-features/44.1.0/ckeditor5-premium-features.css",
-        ],
-        fileName: "export-pdf-demo.pdf",
-        converterOptions: {
-            format: "Tabloid",
-            margin_top: "20mm",
-            margin_bottom: "20mm",
-            margin_right: "24mm",
-            margin_left: "24mm",
-            page_orientation: "portrait",
-        },
-    },
-    exportWord: {
-        stylesheets: [
-            /* This path should point to application stylesheets. */
-            /* See: https://ckeditor.com/docs/ckeditor5/latest/features/converters/export-word.html */
-            "./style.css",
-            /* Export Word needs access to stylesheets that style the content. */
-            "https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.css",
-            "https://cdn.ckeditor.com/ckeditor5-premium-features/44.1.0/ckeditor5-premium-features.css",
-        ],
-        fileName: "export-word-demo.docx",
-        converterOptions: {
-            document: {
-                orientation: "portrait",
-                size: "Tabloid",
-                margins: {
-                    top: "20mm",
-                    bottom: "20mm",
-                    right: "24mm",
-                    left: "24mm",
-                },
-            },
-        },
-    },
+    balloonToolbar: ["bold", "italic", "|", "link", "|", "bulletedList", "numberedList"],
+    blockToolbar: ["bold", "italic", "|", "link", "insertTable", "|", "bulletedList", "numberedList", "outdent", "indent"],
     heading: {
         options: [
             {
@@ -308,19 +160,10 @@ const editorConfig = {
             },
         ],
     },
-    htmlSupport: {
-        allow: [
-            {
-                name: /^.*$/,
-                styles: true,
-                attributes: true,
-                classes: true,
-            },
-        ],
-    },
     image: {
-        toolbar: ["toggleImageCaption", "imageTextAlternative", "|", "imageStyle:inline", "imageStyle:wrapText", "imageStyle:breakText", "|", "resizeImage", "|", "ckboxImageEdit"],
+        toolbar: ["toggleImageCaption", "imageTextAlternative", "|", "imageStyle:inline", "imageStyle:wrapText", "imageStyle:breakText", "|", "resizeImage"],
     },
+    initialData: "",
     licenseKey: LICENSE_KEY,
     link: {
         addTargetToExternalLinks: true,
@@ -342,84 +185,12 @@ const editorConfig = {
             reversed: true,
         },
     },
-    mention: {
-        feeds: [
-            {
-                marker: "@",
-                feed: [
-                    /* See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html */
-                ],
-            },
-        ],
-    },
-    mergeFields: {
-        /* Read more: https://ckeditor.com/docs/ckeditor5/latest/features/merge-fields.html#configuration */
+    menuBar: {
+        isVisible: true,
     },
     placeholder: "Type or paste your content here!",
-    style: {
-        definitions: [
-            {
-                name: "Article category",
-                element: "h3",
-                classes: ["category"],
-            },
-            {
-                name: "Title",
-                element: "h2",
-                classes: ["document-title"],
-            },
-            {
-                name: "Subtitle",
-                element: "h3",
-                classes: ["document-subtitle"],
-            },
-            {
-                name: "Info box",
-                element: "p",
-                classes: ["info-box"],
-            },
-            {
-                name: "Side quote",
-                element: "blockquote",
-                classes: ["side-quote"],
-            },
-            {
-                name: "Marker",
-                element: "span",
-                classes: ["marker"],
-            },
-            {
-                name: "Spoiler",
-                element: "span",
-                classes: ["spoiler"],
-            },
-            {
-                name: "Code (dark)",
-                element: "pre",
-                classes: ["fancy-code", "fancy-code-dark"],
-            },
-            {
-                name: "Code (bright)",
-                element: "pre",
-                classes: ["fancy-code", "fancy-code-bright"],
-            },
-        ],
-    },
     table: {
         contentToolbar: ["tableColumn", "tableRow", "mergeTableCells", "tableProperties", "tableCellProperties"],
-    },
-    mediaEmbed: {
-        previewsInData: true,
-        providers: [
-            {
-                name: "youtube",
-                url: [/^(?:m\.)?youtube\.com\/watch\?v=([\w-]+)/, /^(?:m\.)?youtube\.com\/v\/([\w-]+)/, /^youtube\.com\/embed\/([\w-]+)/, /^youtu\.be\/([\w-]+)/],
-                html: (match) => {
-                    const id = match[1];
-                    return '<div class="video-embed">' + '<iframe width="600" height="400" ' + `src="https://www.youtube.com/embed/${id}" ` + 'frameborder="0" allow="autoplay; encrypted-media" ' + "allowfullscreen></iframe>" + "</div>";
-                },
-            },
-        ],
     },
     template: {
         definitions: [
@@ -469,14 +240,6 @@ function configUpdateAlert(config) {
 
     if (!isModifiedByUser(config.licenseKey, "<YOUR_LICENSE_KEY>")) {
         valuesToUpdate.push("LICENSE_KEY");
-    }
-
-    if (!isModifiedByUser(config.ai?.openAI?.requestHeaders?.Authorization, "Bearer <YOUR_AI_API_KEY>")) {
-        valuesToUpdate.push("AI_API_KEY");
-    }
-
-    if (!isModifiedByUser(config.cloudServices?.tokenUrl, "<YOUR_CLOUD_SERVICES_TOKEN_URL>")) {
-        valuesToUpdate.push("CLOUD_SERVICES_TOKEN_URL");
     }
 
     if (valuesToUpdate.length) {
