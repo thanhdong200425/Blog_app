@@ -17,16 +17,11 @@ Route::middleware(RedirectIfLoggedIn::class)->group(function () {
     Route::get('/sign-in', function () {
         return view('authentication.sign_in');
     })->name('signIn');
-
     Route::post('/sign-in', [UserController::class, 'signIn'])->name('postSignIn');
-
     Route::get('/sign-up', function () {
         return view('authentication.sign_up');
     })->name('signUp');
-
     Route::post('/sign-up', [UserController::class, 'signUp'])->name('postSignUp');
-
-
 });
 
 // Public routes
@@ -35,7 +30,6 @@ Route::get('/article/{slug}', [ArticleController::class, 'show'])->where(['slug'
 
 // Article routes
 Route::prefix('/main')->middleware(CheckAuthenticatedForUser::class)->group(function () {
-
     Route::get('/ask', [ArticleController::class, 'showAskingPage'])->name('ask');
     Route::post('/ask', [ArticleController::class, "create"])->name('submit-asking');
     Route::post('/delete', [ArticleController::class, 'delete'])->name('deleteArticle');

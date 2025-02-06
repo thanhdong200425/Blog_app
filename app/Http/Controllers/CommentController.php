@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contract\CommentRepositoryInterface;
 use App\Models\Comment;
 use Exception;
 use Illuminate\Http\Request;
@@ -10,56 +11,33 @@ use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
+    protected CommentRepositoryInterface $commentRepository;
+    public function __construct(CommentRepositoryInterface $commentRepository)
+    {
+        $this->commentRepository = $commentRepository;
+    }
     public function comment(Request $request)
     {
-
         try {
             $validatedData = $request->validate([
                 'content' => ['required', 'string'],
                 'parentId' => ['nullable', 'exists:comments,id'],
                 'articleId' => ['required', 'exists:articles,id']
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+            $newComment = $this->commentRepository->create([
+                'user_id' => Auth::id(),
+                'article_id' => $validatedData['articleId'],
+                'content' => $validatedData['content'],
+                'parent_id' => $validatedData['parentId'] ?? null
+            ]);
+            return response()->json([
+                'data' => $newComment
+            ], 200);
+        } catch (Exception $er) {
             return response()->json([
                 'message' => 'Validation failed',
-                'errors' => $e->errors()
+                'errors' => $er
             ], 422);
-        }
-
-        $commentPath = $this->generateCommentPath($validatedData['parentId'] ?? null);
-
-        $comment = Comment::create([
-            'user_id' => Auth::id(),
-            'article_id' => $validatedData['articleId'],
-            'content' => $validatedData['content'],
-            'path' => $commentPath,
-            "parent_id" => $validatedData['parentId'] ?? null
-        ]);
-
-        // Perform a eager loading to the new comment
-        $comment->load('author');
-
-        return response()->json([
-            'data' => $comment
-        ], 200);
-    }
-
-    protected function generateCommentPath($parentId)
-    {
-        // When the comment is a root
-        if ($parentId === null) {
-            $rootQuantity = Comment::whereNull('parent_id')->count();
-            return (string) ($rootQuantity + 1);
-        }
-        // When the comment is a children (reply comment)
-        try {
-            $parent = Comment::findOrFail($parentId);
-            $parentPath = $parent->path;
-            $childQuantity = Comment::where('parent_id', $parentId)->where('path', 'like', "{$parentPath}.%")->count();
-            return "{$parentPath}." . ($childQuantity + 1);
-        } catch (Exception $e) {
-            Log::error('Parent comment does not found: ' + $e->getMessage());
-            throw $e;
         }
     }
 
@@ -69,23 +47,10 @@ class CommentController extends Controller
             'id' => 'required'
         ]);
 
-        $comment = Comment::find($validatedResult['id']);
+        $result = $this->commentRepository->delete($validatedResult['id']);
 
-        if (!$comment) {
-            return response()->json([
-                'message' => 'Comment not found'
-            ], 404);
-        }
-
-        if ($comment->user_id !== Auth::id()) {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 403);
-        }
-
-        $comment->delete();
         return response()->json([
-            'delete' => true
+            'delete' => $result > 0 ? true : false,
         ], 200);
     }
 }

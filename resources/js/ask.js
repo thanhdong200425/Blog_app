@@ -206,7 +206,16 @@ const editorConfig = {
 
 configUpdateAlert(editorConfig);
 let newEditor;
-ClassicEditor.create(document.querySelector("#editor"), editorConfig).then((editor) => {
+const editorElement = document.querySelector("#editor");
+// Decode HTML entities in the initial content
+const tempDiv = document.createElement("div");
+tempDiv.innerHTML = editorElement.innerHTML;
+const initialContent = tempDiv.textContent;
+
+ClassicEditor.create(editorElement, {
+    ...editorConfig,
+    initialData: initialContent,
+}).then((editor) => {
     newEditor = editor;
     const wordCount = editor.plugins.get("WordCount");
     document.querySelector("#editor-word-count").appendChild(wordCount.wordCountContainer);

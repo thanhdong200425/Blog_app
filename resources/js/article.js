@@ -103,6 +103,7 @@ const addAComment = async (url, content, articleId, parentId = null) => {
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                Accept: "application/json",
             },
             body: JSON.stringify({
                 content,

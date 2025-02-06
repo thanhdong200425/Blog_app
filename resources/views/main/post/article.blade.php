@@ -128,7 +128,7 @@
             @if (Auth::check())
                 <div class="comment-input">
                     <div class="user-avatar">
-                        <img src="https://picsum.photos/200/200" alt="User avatar" />
+                        <img src="{{ $article->author->image_url }}" alt="User avatar" />
                     </div>
                     <div class="input-wrapper">
                         <textarea placeholder="Write a comment..." name="content" id="content" required></textarea>

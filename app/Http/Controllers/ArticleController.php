@@ -37,7 +37,7 @@ class ArticleController extends Controller
             'content' => 'required'
         ]);
         if (!Auth::check())
-            return redirect()->back()->withErrors(['error', 'OOps, Sorry, we have some problem!']);
+            return redirect()->back()->withErrors(['error', 'OOps, You are not authenticated']);
 
         $this->articleRepository->create([
             'title' => $validateData['title'],
@@ -58,7 +58,7 @@ class ArticleController extends Controller
 
     public function update($slug, $id)
     {
-        $article = Article::where('id', $id)->first();
+        $article = $this->articleRepository->getById($id);
         if (!$article)
             return redirect()->route('main')->with('error', 'Article not found');
         return view('main.post.update-article', ['article' => $article]);
@@ -66,11 +66,10 @@ class ArticleController extends Controller
 
     public function save(Request $request)
     {
-        Article::where('id', $request->articleId)->update([
+        $this->articleRepository->update($request->articleId, [
             'title' => $request->title,
             'content' => $request->content
         ]);
-
         return redirect()->route('main')->with('success', 'Successfully updated post');
     }
 }
