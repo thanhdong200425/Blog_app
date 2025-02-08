@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Contract\ArticleRepositoryInterface;
 use App\Contract\CommentRepositoryInterface;
+use App\Contract\LikeRepositoryInterface;
 use App\Contract\UserRepositoryInterface;
 use App\Repositories\ArticleRepository;
 use App\Repositories\CommentRepository;
+use App\Repositories\LikeRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(ArticleRepositoryInterface::class, ArticleRepository::class);
         $this->app->bind(CommentRepositoryInterface::class, CommentRepository::class);
+        $this->app->bind(LikeRepositoryInterface::class, LikeRepository::class);
     }
 
     /**

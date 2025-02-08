@@ -1,49 +1,41 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Article;
-use App\Models\Comment;
+use App\Contract\LikeRepositoryInterface;
 use App\Models\Like;
 use App\Models\LikeQuantity;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class LikeController extends Controller
 {
+    private LikeRepositoryInterface $likeRepository;
+    public function __construct(LikeRepositoryInterface $likeRepository)
+    {
+        $this->likeRepository = $likeRepository;
+    }
     public function like(Request $request)
     {
         try {
             // Validate request
             $validatedResult = $request->validate([
                 'entityId' => ['required', 'integer'],
-                'type' => ['required']
+                'type' => ['required'],
             ]);
-
-            $model = $validatedResult['type'] == 'comment' ? Comment::find($validatedResult['entityId']) : Article::find($validatedResult['entityId']);
-            if ($validatedResult['type'] == 'article' && $model->likes()->where('user_id', Auth::id())->exists())
+            $model = $this->likeRepository->getEntityByType($validatedResult['type'], $validatedResult['entityId']);
+            if ($validatedResult['type'] == 'article' && $this->likeRepository->checkWhetherUserLikedOrNot($model, Auth::id()))
                 return response()->json([
-                    'error' => 'You have already liked this article'
+                    'error' => 'You have already liked this',
                 ], 400);
 
-            // If the condition is passed, create a new like for model (Comment or Article)
-            $model->likes()->create([
-                'user_id' => Auth::id()
-            ]);
-            // Create a record for the like quantity for article if not exists or update it
-            $currentQuantity = $model->likeQuantity()->first();
-            $model->likeQuantity()->updateOrCreate(
-                ['entity_id' => $model->id],
-                ['quantity' => ($currentQuantity ? $currentQuantity->quantity : 0) + 1]
-            );
+            $this->likeRepository->createLike($model, Auth::id());
             return response()->json(['liked' => true]);
         } catch (Exception $e) {
             Log::error('Like error:', [
                 'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -54,29 +46,21 @@ class LikeController extends Controller
         try {
             $validatedResult = $request->validate([
                 'entityId' => ['required', 'integer'],
-                'type' => ['required']
+                'type' => ['required'],
             ]);
 
             // Find the article and delete like of it
-            $model = $validatedResult['type'] == 'article' ? Article::find($validatedResult['entityId']) : Comment::find($validatedResult['entityId']);
-            $likesModel = $model->likes()->where('user_id', Auth::id())->first();
-
+            $model = $this->likeRepository->getEntityByType($validatedResult['type'], $validatedResult['entityId']);
+            $likesModel = $this->likeRepository->getLikesForSpecificUser($model, Auth::id());
             // Check whether a user has liked the article
-            if ($validatedResult['type'] == 'article' && !$likesModel)
+            if ($validatedResult['type'] == 'article' && ! $likesModel)
                 return response()->json(['error' => 'You have not liked this post yet'], 400);
-
-            $likesModel->delete();
-
-            // Decrement like quantity
-            $model->likeQuantity()->update([
-                'quantity' => $model->likeQuantity()->first()->quantity - 1
-            ]);
-
+            $this->likeRepository->deleteLike($model, $likesModel);
             return response()->json(['liked' => false]);
         } catch (Exception $e) {
             Log::error('Like error:', [
                 'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
             return response()->json(['error' => $e->getMessage()], 500);
         }
