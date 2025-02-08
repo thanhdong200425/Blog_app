@@ -33,7 +33,7 @@ class UserController extends Controller
         $credentials = $request->only('email', 'password');
 
         // Get user by retrieve email
-        if (!Auth::attempt($credentials))
+        if (! Auth::attempt($credentials))
             return redirect()->route('signIn')->withErrors(['error' => 'Your password is not correct']);
 
         // Regenerate sessionID after log-in
@@ -57,14 +57,13 @@ class UserController extends Controller
         // Get info from validated data
         $username = $validateResult['email'];
         $password = $validateResult['password'];
-
-
         // Create a new User and add it into database
-        $user = User::create([
-            'email' => $username,
-            'hashed_password' => Hash::make($password, ['rounds' => 12])
-        ]);
-
+        $this->userRepository->create(
+            [
+                'email' => $username,
+                'hashed_password' => Hash::make($password, ['rounds' => 12])
+            ]
+        );
         return redirect()->route('signIn');
     }
 
@@ -98,7 +97,7 @@ class UserController extends Controller
     public function save(Request $request)
     {
         $user = Auth::user();
-        if (!Auth::check())
+        if (! Auth::check())
             return redirect()->route('signIn');
         // Validate request data
         $validatedData = $request->validate([
@@ -122,7 +121,7 @@ class UserController extends Controller
             Storage::disk('public')->delete($relativePathOfOldImage);
         }
         $filePath = $imageFile->store('uploads', 'public');
-        $fileUrl = asset('storage/' . $filePath);
+        $fileUrl = asset('storage/'.$filePath);
         return $fileUrl;
     }
 
