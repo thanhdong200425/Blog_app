@@ -113,10 +113,11 @@ const addAComment = async (url, content, articleId, parentId = null) => {
         });
 
         const data = await response.json();
+        if (!response.ok) throw new Error(data.message);
         return data;
     } catch (error) {
         console.log("Error in addAComment function: " + error);
-        return;
+        throw error;
     }
 };
 
@@ -245,6 +246,7 @@ function setupReplyHandlers(commentElement) {
                 createCommentComponent(newComment.data, parentComponent);
                 updateCommentQuantity();
             } catch (error) {
+                showToast(error);
                 console.log("Error when hit reply button: " + error);
             }
         });

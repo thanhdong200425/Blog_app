@@ -53,5 +53,10 @@ class Comment extends Model
         return Carbon::parse($value)->setTimezone('Asia/Ho_Chi_Minh');
     }
 
+    public function article()
+    {
+        return $this->belongsTo(Article::class);
+    }
+
     protected $fillable = ['user_id', 'article_id', 'content', 'path', 'parent_id'];
 }

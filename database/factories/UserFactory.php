@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'date_of_birth' => fake()->date(),
-            'image_url' => 'https://picsum.photos/id/' . fake()->numberBetween(1, 1000) . '/200/200'
+            'image_url' => 'https://picsum.photos/id/'.fake()->numberBetween(1, 100).'/200/200'
         ];
     }
 
@@ -38,7 +38,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

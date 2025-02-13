@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ArticleSeeder::class,
             CommentSeeder::class,
-            EntityTypeSeeder::class,
+            LikeSeeder::class,
+            LikeQuantitySeeder::class
         ]);
     }
 }

@@ -24,8 +24,11 @@ class CommentRepository extends BaseRepository implements CommentRepositoryInter
             if ($id === null)
                 return (string) (Comment::whereNull('parent_id')->count() + 1);
             $parentPath = Comment::findOrFail($id)->path;
-            $childQuantity = Comment::where('parent_id', $id)->where('path', 'like', $parentPath)->count();
-            return "{$parentPath}." . ($childQuantity + 1);
+            $childQuantity = Comment::where('parent_id', $id);
+            if ($parentPath !== null)
+                $childQuantity->where('path', 'like', $parentPath, '%');
+            $childQuantity = $childQuantity->count();
+            return "{$parentPath}.".($childQuantity + 1);
         } catch (Exception $e) {
             throw $e;
         }

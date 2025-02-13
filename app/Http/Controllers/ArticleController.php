@@ -17,11 +17,13 @@ class ArticleController extends Controller
     }
     public function index()
     {
+
         return view('main.post.list-article', ['articles' => $this->articleRepository->getAllPaginated(10), 'latestArticles' => $this->articleRepository->getAllBySort('created_at', 'desc')]);
     }
 
     public function show($slug)
     {
+        // dd($this->articleRepository->getBySlug($slug));
         return view('main.post.article', ['article' => $this->articleRepository->getBySlug($slug)]);
     }
 
@@ -36,7 +38,7 @@ class ArticleController extends Controller
             'title' => 'required',
             'content' => 'required'
         ]);
-        if (!Auth::check())
+        if (! Auth::check())
             return redirect()->back()->withErrors(['error', 'OOps, You are not authenticated']);
 
         $this->articleRepository->create([
@@ -51,7 +53,7 @@ class ArticleController extends Controller
     public function delete(Request $request)
     {
         $result = $this->articleRepository->delete($request->articleId);
-        if (!$result)
+        if (! $result)
             return redirect()->route('main')->with('error', 'OOps, Sorry, we have some problem!');
         return redirect()->route('main')->with('success', 'Article was completely deleted');
     }
@@ -59,7 +61,7 @@ class ArticleController extends Controller
     public function update($slug, $id)
     {
         $article = $this->articleRepository->getById($id);
-        if (!$article)
+        if (! $article)
             return redirect()->route('main')->with('error', 'Article not found');
         return view('main.post.update-article', ['article' => $article]);
     }

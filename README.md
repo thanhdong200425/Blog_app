@@ -6,7 +6,7 @@ This project demonstrates the implementation of the Repository Pattern in a Lara
 
 The project uses the following repository structure:
 
--   `app/Contract/` - Contains repository interfaces
+-`app/Contract/` - Contains repository interfaces
 
     -   `GeneralRepositoryInterface.php` - Base interface with common CRUD operations
     -   `ArticleRepositoryInterface.php` - Article-specific operations
@@ -14,7 +14,7 @@ The project uses the following repository structure:
     -   `LikeRepositoryInterface.php` - Like-specific operations
     -   `UserRepositoryInterface.php` - User-specific operations
 
--   `app/Repositories/` - Contains repository implementations
+-`app/Repositories/` - Contains repository implementations
     -   `BaseRepository.php` - Abstract base class implementing common CRUD operations
     -   `ArticleRepository.php` - Article repository implementation
     -   `CommentRepository.php` - Comment repository implementation
@@ -23,11 +23,11 @@ The project uses the following repository structure:
 
 ## Key Features
 
--   Separation of concerns between data access and business logic
--   Consistent interface for data operations
--   Easy to maintain and test
--   Swappable implementations without affecting business logic
--   Type-hinted repository injection
+- Separation of concerns between data access and business logic
+- Consistent interface for data operations
+- Easy to maintain and test
+- Swappable implementations without affecting business logic
+- Type-hinted repository injection
 
 ## Usage Example
 

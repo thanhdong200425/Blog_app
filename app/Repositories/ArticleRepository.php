@@ -26,7 +26,9 @@ class ArticleRepository extends BaseRepository implements ArticleRepositoryInter
             'comments' => function ($query) {
                 $query->orderBy('path', 'asc');
             },
-            'comments.author'
+            'comments.author',
+            'likes',
+            'likeQuantity'
         ])->where('slug', $slug)->first();
     }
 }

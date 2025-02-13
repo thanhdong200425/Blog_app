@@ -14,7 +14,7 @@
         <div class="post-action-container">
             <div class="votes">
                 <span
-                    class="upvote {{ $article->likes()->exists() && $article->likes()->where('user_id', Auth::id())->exists() ? 'active' : '' }}"
+                    class="upvote {{ $article->likes && $article->likes()->exists() && $article->likes()->where('user_id', Auth::id())->exists() ? 'active' : '' }}"
                     data-entity-id="{{ $article->id }}" data-url="{{ route('like') }}">
                     <img src="{{ asset('icons/upvote-icon.svg') }}" alt="upvote icon" />
                 </span>
