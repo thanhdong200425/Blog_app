@@ -8,18 +8,15 @@
 
     @vite('resources/css/main/post/post.css')
 @endsection
-
 @section('main-part')
     <div class="main-container">
         <div class="post-action-container">
             <div class="votes">
-                <span
-                    class="upvote {{ $article->likes && $article->likes()->exists() && $article->likes()->where('user_id', Auth::id())->exists() ? 'active' : '' }}"
-                    data-entity-id="{{ $article->id }}" data-url="{{ route('like') }}">
+                <span class="upvote {{ $article->liked == '1' ? 'active' : '' }}" data-entity-id="{{ $article->id }}"
+                    data-url="{{ route('like') }}">
                     <img src="{{ asset('icons/upvote-icon.svg') }}" alt="upvote icon" />
                 </span>
-                <span
-                    class="figure {{ $article->likes()->exists() && $article->likes()->where('user_id', Auth::id())->exists() ? 'active' : '' }}">{{ $article->likeQuantity()->exists() ? $article->likeQuantity()->first()->quantity : 0 }}</span>
+                <span class="figure {{ $article->liked == 1 ? 'active' : '' }}">{{ $article->likes_quantity || 0 }}</span>
                 <span class="downvote" data-entity-id="{{ $article->id }}" data-url="{{ route('unlike') }}">
                     <img src="{{ asset('icons/downvote-icon.svg') }}" alt="downvote icon" />
                 </span>
@@ -45,7 +42,8 @@
                             </div>
                             <div class="title">
                                 <div class="author-name">
-                                    <p>{{ $article->author->first_name }} {{ $article->author->last_name }}</p>
+                                    <p>{{ $article->author->first_name }}
+                                        {{ $article->author->last_name }}</p>
                                     <span> {{ $article->author->email }}</span>
                                 </div>
                                 <div class="author-statistical">
@@ -64,7 +62,7 @@
                             </div>
                         </div>
                         <div class="info">
-                            <p>Created at {{ $article->created_at->format('M jS, Y h:i A') }}</p>
+                            <p>Created at {{ \Carbon\Carbon::parse($article->created_at)->format('F j, Y, g:i a') }}</p>
                             <div class="article-statistical">
                                 @if (Auth::check() && Auth::user()->id == $article->author->id)
                                     <form method="post" action="{{ route('deleteArticle') }}" id="delete-form-article">
@@ -121,7 +119,7 @@
     <div class="comment-container">
         <div class="comment-wrapper">
             <div class="comment-header">
-                <h3>Comments ({{ $article->comments->count() }})</h3>
+                <h3>Comments ({{ $article->comments->count() ?? 0 }})</h3>
             </div>
 
             {{-- Comment input part --}}
@@ -146,8 +144,7 @@
                 @foreach ($article->comments as $comment)
                     @php
                         $numberOfDots = substr_count($comment->path, '.');
-                        $isLiked =
-                            $comment->likes()->exists() && $comment->likes()->where('user_id', Auth::id())->exists();
+                        $isLiked = $comment->liked == 1;
                     @endphp
                     <div class="comment-item" style="margin-left: {{ ($numberOfDots >= 3 ? 3 : $numberOfDots) * 60 }}px"
                         data-id="{{ $comment->id }}">
@@ -158,7 +155,8 @@
                             <div class="comment-header">
                                 <div class="user-info">
                                     <h4>{{ $comment->author->first_name . ' ' . $comment->author->last_name }}</h4>
-                                    <span class="time">{{ $comment->created_at->diffForHumans() }}</span>
+                                    <span
+                                        class="time">{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</span>
                                 </div>
                                 <div class="comment-actions">
                                     @if (Auth::id() == $comment->user_id)
@@ -180,7 +178,7 @@
                                     <button class="reaction-btn {{ $isLiked ? 'active' : '' }}"
                                         data-id="{{ $comment->id }}">
                                         <img src="{{ asset('icons/like-icon.svg') }}" alt="Like" />
-                                        <span class="comment-figure">{{ $comment->likes->count() }}</span>
+                                        <span class="comment-figure">{{ $comment->quantity ?? 0 }}</span>
                                     </button>
                                     <button class="reaction-btn reply-trigger">
                                         <img src="{{ asset('icons/reply-icon.svg') }}" alt="Reply" />
