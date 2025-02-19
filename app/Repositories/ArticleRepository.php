@@ -38,24 +38,34 @@ class ArticleRepository extends BaseRepository implements ArticleRepositoryInter
     }
     public function getBySlug($slug)
     {
-        $userId = Auth::id();
-        $article = $this->getArticleBySlug($slug, $userId);
+        // Use Query Builder
+        // $userId = Auth::id();
+        // $article = $this->getArticleBySlug($slug, $userId);
 
 
-        if (! $article)
-            return null;
-        $this->extractProperties($article, [
-            'author' => [
-                'id' => 'user_id',
-                'email' => 'email',
-                'first_name' => 'first_name',
-                'last_name' => 'last_name',
-                'image_url' => 'author_image'
-            ]
-        ]);
-        $article->comments = $this->getArticleComments($article, $userId);
-        // dd($article);
-        return $article;
+        // if (! $article)
+        //     return null;
+        // $this->extractProperties($article, [
+        //     'author' => [
+        //         'id' => 'user_id',
+        //         'email' => 'email',
+        //         'first_name' => 'first_name',
+        //         'last_name' => 'last_name',
+        //         'image_url' => 'author_image'
+        //     ]
+        // ]);
+        // $article->comments = $this->getArticleComments($article, $userId);
+        // // dd($article);
+        // return $article;
+
+        // Use Eloquent
+        return $this->model->with([
+            'author',
+            'comments' => function ($query) {
+                $query->orderBy('path', 'asc');
+            },
+            'comments.author'
+        ])->where('slug', $slug)->first();
     }
     private function getAllArticles($column = 'articles.id', $type = 'asc')
     {

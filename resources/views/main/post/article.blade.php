@@ -12,14 +12,15 @@
     <div class="main-container">
         <div class="post-action-container">
             <div class="votes">
-                <span class="upvote {{ $article->liked == '1' ? 'active' : '' }}" data-entity-id="{{ $article->id }}"
-                    data-url="{{ route('like') }}">
+                <span class="upvote {{ $article->liked != null && $article->liked == '1' ? 'active' : '' }}"
+                    data-entity-id="{{ $article->id }}" data-url="{{ route('like') }}">
                     <img src="{{ asset('icons/upvote-icon.svg') }}" alt="upvote icon" />
-                </span>
-                <span class="figure {{ $article->liked == 1 ? 'active' : '' }}">{{ $article->like_quantity ?? 0 }}</span>
-                <span class="downvote" data-entity-id="{{ $article->id }}" data-url="{{ route('unlike') }}">
-                    <img src="{{ asset('icons/downvote-icon.svg') }}" alt="downvote icon" />
-                </span>
+                    </>
+                    <span
+                        class="figure {{ $article->liked == 1 ? 'active' : '' }}">{{ $article->like_quantity ?? 0 }}</span>
+                    <span class="downvote" data-entity-id="{{ $article->id }}" data-url="{{ route('unlike') }}">
+                        <img src="{{ asset('icons/downvote-icon.svg') }}" alt="downvote icon" />
+                    </span>
             </div>
 
             <div class="bookmark">

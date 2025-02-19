@@ -24,5 +24,12 @@ class UpdateTimestampSeeder extends Seeder
                 $model->save();
             }
         });
+        Comment::chunk(100, function ($models) {
+            foreach ($models as $model) {
+                $model->created_at = now();
+                $model->updated_at = now();
+                $model->save();
+            }
+        });
     }
 }
