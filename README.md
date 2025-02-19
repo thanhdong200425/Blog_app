@@ -1,5 +1,7 @@
 # Laravel Repository Pattern Project
 
+## SQL Schemas are placed inside ```dump_data``` folder
+
 This project demonstrates the implementation of the Repository Pattern in a Laravel application. The repository pattern helps abstract data persistence logic from business logic and provides a more maintainable and testable codebase.
 
 ## Repository Structure
