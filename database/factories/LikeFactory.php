@@ -21,24 +21,18 @@ class LikeFactory extends Factory
     {
         static $generatedKeys = [];
         static $userIds = null;
-        static $commentIds = null;
         static $articleIds = null;
 
         if ($userIds === null)
             $userIds = User::pluck('id')->all();
-        if ($commentIds === null)
-            $commentIds = Comment::pluck('id')->all();
         if ($articleIds === null)
             $articleIds = Article::pluck('id')->all();
 
         do {
             $userId = $this->faker->randomElement($userIds);
-            $entityType = $this->faker->randomElement([Article::class, Comment::class]);
-            $entityId = ($entityType === Article::class)
-                ? $this->faker->randomElement($articleIds)
-                : $this->faker->randomElement($commentIds);
-
-            $key = $userId."_".$entityId."_".$entityType;
+            $entityType = Article::class;
+            $entityId = $this->faker->randomElement($articleIds);
+            $key = $userId."_".$entityId;
         } while (isset($generatedKeys[$key]));
 
         $generatedKeys[$key] = true;

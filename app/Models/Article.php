@@ -28,7 +28,7 @@ class Article extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'article_id');
+        return $this->hasMany(Comment::class, 'article_id')->orderBy('path', 'asc');
     }
 
     protected $fillable = ['user_id', 'title', 'content', 'slug', 'like_quantity', 'comment_quantity'];

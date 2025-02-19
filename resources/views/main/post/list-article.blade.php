@@ -47,7 +47,8 @@
                         {{-- Top --}}
                         <div class="top-content">
                             <p>{{ $article->author->first_name . ' ' . $article->author->last_name }}
-                                <span>{{ $article->created_at->diffForHumans() }}</span>
+                                {{-- <span>{{ $article->created_at->diffForHumans() }}</span> --}}
+                                <span>{{ $article->created_at ?? '' }}</span>
                                 <span>
                                     <img src="/icons/url-icon.svg" alt="url copy" />
                                 </span>
@@ -71,11 +72,11 @@
 
                             <span class="bubble-chat">
                                 <img src="/icons/bubble-chat-icon.svg" />
-                                <span>{{ $article->comments->count() ?? 0 }}</span>
+                                <span>{{ $article->comment_quantity ?? 0 }}</span>
                             </span>
                             <span class="up-and-down">
                                 <img src="/icons/up-and-down-icon.svg" />
-                                <span>{{ $article->likeQuantity()->exists() ? $article->likeQuantity()->first()->quantity : 0 }}</span>
+                                <span>{{ $article->like_quantity }}</span>
                             </span>
                         </div>
 
@@ -104,11 +105,11 @@
                         </span>
                         <span class="bubble-chat">
                             <img src="/icons/bubble-chat-icon.svg" />
-                            <span>{{ $article->comments->count() }}</span>
+                            <span>{{ $article->comment_quantity }}</span>
                         </span>
                         <span class="up-and-down">
                             <img src="/icons/up-and-down-icon.svg" />
-                            <span>{{ $article->likeQuantity()->exists() ? $article->likeQuantity()->first()->quantity : 0 }}</span>
+                            <span>{{ $article->like_quantity }}</span>
                         </span>
                     </div>
                     <span>{{ $article->author->first_name . ' ' . $article->author->last_name }}</span>

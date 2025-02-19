@@ -16,18 +16,31 @@ class ArticleRepository extends BaseRepository implements ArticleRepositoryInter
     }
     public function getAllBySort($column, $type)
     {
-        return $this->model->orderBy($column, $type)->get();
+        return $this->model->with('author')->orderBy($column, $type)->latest()->take(5)->get();
     }
     public function getAllPaginated($perPage)
     {
-        // dd($this->getAllArticles(perPage: $perPage));
-        // return $this->getAllArticles(perPage: $perPage);
-        return $this->model->paginate($perPage);
+        $allArticles = $this->getAllArticles()->paginate($perPage);
+
+        $allArticles->getCollection()->transform(function ($article) {
+            $this->extractProperties($article, [
+                'author' => [
+                    'id' => 'user_id',
+                    'email' => 'email',
+                    'first_name' => 'first_name',
+                    'last_name' => 'last_name',
+                    'image_url' => 'image_url'
+                ]
+            ]);
+            return $article;
+        });
+        return $allArticles;
     }
     public function getBySlug($slug)
     {
         $userId = Auth::id();
         $article = $this->getArticleBySlug($slug, $userId);
+
 
         if (! $article)
             return null;
@@ -41,11 +54,12 @@ class ArticleRepository extends BaseRepository implements ArticleRepositoryInter
             ]
         ]);
         $article->comments = $this->getArticleComments($article, $userId);
+        // dd($article);
         return $article;
     }
-    private function getAllArticles($column = 'articles.id', $type = 'desc', $perPage = null)
+    private function getAllArticles($column = 'articles.id', $type = 'asc')
     {
-        $articles = DB::table('articles')
+        return DB::table('articles')
             ->select(
                 'articles.*',
                 'authors.email',
@@ -55,24 +69,9 @@ class ArticleRepository extends BaseRepository implements ArticleRepositoryInter
             )
             ->leftJoin('users as authors', 'authors.id', '=', 'articles.user_id')
             ->orderBy($column, $type);
-        $articles->transform(function ($article) {
-            $this->extractProperties($article, [
-                'author' => [
-                    'id' => 'user_id',
-                    'email' => 'email',
-                    'first_name' => 'first_name',
-                    'last_name' => 'last_name',
-                    'image_url' => 'image_url'
-                ]
-            ]);
-        });
-        if ($perPage !== null)
-            $articles = $articles->paginate($perPage);
-        return $articles;
     }
     private function extractProperties(&$object, array $mappings)
     {
-        // TODO: Change this function to only use 1 for loop
         foreach ($mappings as $newProperties => $newProperty) {
             $subObject = (object) [];
             foreach ($newProperty as $key => $originalKey) {
@@ -92,7 +91,6 @@ class ArticleRepository extends BaseRepository implements ArticleRepositoryInter
                 'authors.first_name',
                 'authors.last_name',
                 'authors.image_url as author_image',
-                'likes_quantity.quantity as likes_quantity',
             ])
             ->selectRaw("EXISTS(
             SELECT 1 FROM likes
@@ -102,7 +100,6 @@ class ArticleRepository extends BaseRepository implements ArticleRepositoryInter
         ) AS liked", [$userId])
             ->leftJoin('users as authors', 'authors.id', '=', 'articles.user_id')
             ->leftJoin('comments', 'comments.article_id', '=', 'articles.id')
-            ->leftJoin('likes_quantity', 'likes_quantity.entity_id', '=', 'articles.id')
             ->where('articles.slug', $slug)
             ->first();
     }
@@ -117,14 +114,10 @@ class ArticleRepository extends BaseRepository implements ArticleRepositoryInter
                 'comment_authors.first_name as author_first_name',
                 'comment_authors.last_name as author_last_name',
                 'comment_authors.image_url as author_image_url',
-                'likes_quantity.quantity as quantity'
             )
             ->selectRaw('EXISTS(SELECT 1 FROM likes WHERE entity_id = comments.id AND entity_type LIKE "%Comment" AND user_id = ?) AS liked', [$userId])
             ->orderBy('path', 'asc')
             ->leftJoin('users as comment_authors', 'comment_authors.id', '=', 'comments.user_id')
-            ->leftJoin('likes_quantity', function (JoinClause $join) {
-                $join->on('likes_quantity.entity_id', '=', 'comments.id')->where('likes_quantity.entity_type', 'like', '%Comment');
-            })
             ->where('comments.article_id', '=', $article->id)
             ->get()
             ->map(function ($comment) {

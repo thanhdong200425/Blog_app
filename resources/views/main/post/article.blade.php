@@ -16,7 +16,7 @@
                     data-url="{{ route('like') }}">
                     <img src="{{ asset('icons/upvote-icon.svg') }}" alt="upvote icon" />
                 </span>
-                <span class="figure {{ $article->liked == 1 ? 'active' : '' }}">{{ $article->likes_quantity || 0 }}</span>
+                <span class="figure {{ $article->liked == 1 ? 'active' : '' }}">{{ $article->like_quantity ?? 0 }}</span>
                 <span class="downvote" data-entity-id="{{ $article->id }}" data-url="{{ route('unlike') }}">
                     <img src="{{ asset('icons/downvote-icon.svg') }}" alt="downvote icon" />
                 </span>
@@ -81,7 +81,7 @@
                                 @endif
                                 <span class="comment">
                                     <img src="{{ asset('icons/comment-icon.svg') }}" alt="comment icon" />
-                                    {{ $article->comments->count() ?? 0 }}
+                                    {{ $article->comment_quantity ?? 0 }}
                                 </span>
                             </div>
                         </div>
@@ -119,7 +119,7 @@
     <div class="comment-container">
         <div class="comment-wrapper">
             <div class="comment-header">
-                <h3>Comments ({{ $article->comments->count() ?? 0 }})</h3>
+                <h3>Comments ({{ $article->comment_quantity ?? 0 }})</h3>
             </div>
 
             {{-- Comment input part --}}
@@ -147,7 +147,7 @@
                         $isLiked = $comment->liked == 1;
                     @endphp
                     <div class="comment-item" style="margin-left: {{ ($numberOfDots >= 3 ? 3 : $numberOfDots) * 60 }}px"
-                        data-id="{{ $comment->id }}">
+                        data-id="{{ $comment->id }}" data-article-id="{{ $article->id }}">
                         <div class="comment-user">
                             <img src="{{ $comment->author->image_url }}" alt="Commenter avatar" />
                         </div>
@@ -178,7 +178,7 @@
                                     <button class="reaction-btn {{ $isLiked ? 'active' : '' }}"
                                         data-id="{{ $comment->id }}">
                                         <img src="{{ asset('icons/like-icon.svg') }}" alt="Like" />
-                                        <span class="comment-figure">{{ $comment->quantity ?? 0 }}</span>
+                                        <span class="comment-figure">{{ $comment->like_quantity ?? 0 }}</span>
                                     </button>
                                     <button class="reaction-btn reply-trigger">
                                         <img src="{{ asset('icons/reply-icon.svg') }}" alt="Reply" />

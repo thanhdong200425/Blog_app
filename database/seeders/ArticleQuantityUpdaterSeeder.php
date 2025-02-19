@@ -20,18 +20,11 @@ class ArticleQuantityUpdaterSeeder extends Seeder
             ->select('entity_id', DB::raw('count(*) as count'))
             ->pluck('count', 'entity_id')
             ->all();
-        $commentCounts = DB::table('comments')
-            ->groupBy('article_id')
-            ->select('article_id', DB::raw('count(*) as count'))
-            ->pluck('count', 'article_id')
-            ->all();
 
         // "use" is used to tell PHP that inside the anonymous function, $likeCounts and $commentCounts will be used. If you do not tell PHP, all the variables can't access that are defined outside anonymous function
-        Article::chunkById(100, function ($articles) use ($likeCounts, $commentCounts) {
+        Article::chunkById(100, function ($articles) use ($likeCounts) {
             foreach ($articles as $article) {
                 $article->like_quantity = $likeCounts[$article->id] ?? 0;
-                $article->comment_quantity = $commentCounts[$article->id] ?? 0;
-                $article->save();
             }
         });
     }

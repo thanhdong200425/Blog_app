@@ -44,10 +44,11 @@ class CommentController extends Controller
     public function delete(Request $request)
     {
         $validatedResult = $request->validate([
-            'id' => 'required'
+            'id' => 'required',
+            'articleId' => 'required'
         ]);
 
-        $result = $this->commentRepository->delete($validatedResult['id']);
+        $result = $this->commentRepository->delete($validatedResult);
 
         return response()->json([
             'delete' => $result > 0 ? true : false,

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -28,7 +29,7 @@ class ArticleFactory extends Factory
             'user_id' => $this->faker->randomElement($userIds),
             'title' => $title,
             'content' => $content,
-            "slug" => Str::slug($title)
+            "slug" => Str::slug($title),
         ];
     }
 }

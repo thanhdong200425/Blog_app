@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -29,7 +30,7 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'date_of_birth' => fake()->date(),
-            'image_url' => 'https://picsum.photos/id/'.fake()->numberBetween(1, 100).'/200/200'
+            'image_url' => 'https://picsum.photos/id/'.fake()->numberBetween(1, 100).'/200/200',
         ];
     }
 

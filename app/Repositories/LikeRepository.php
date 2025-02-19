@@ -30,7 +30,7 @@ class LikeRepository implements LikeRepositoryInterface
     }
     public function getLikeQuantity($model)
     {
-        return $model->likeQuantity()->first();
+        return $model->like_quantity;
     }
     public function getLikesForSpecificUser($model, $userId)
     {
@@ -39,11 +39,8 @@ class LikeRepository implements LikeRepositoryInterface
     public function updateOrCreateLikeQuantity($model, $isIncrement = true)
     {
         $quantityChange = $isIncrement ? 1 : -1;
-        $currentQuantity = $this->getLikeQuantity($model) ? $this->getLikeQuantity($model)->quantity : 0;
-        return $model->likeQuantity()->updateOrCreate(
-            ['entity_id' => $model->id],
-            ['quantity' => max(0, $currentQuantity + $quantityChange)]
-        );
+        $model->like_quantity += $quantityChange;
+        return $model->save();
     }
     public function deleteLike($entityModel, $likeModel)
     {

@@ -128,6 +128,7 @@ const createCommentComponent = (newCommentData, targetComment = null) => {
     newCommentPart.classList.add("comment-item");
     newCommentPart.style.marginLeft = `${Math.min(newCommentData.path.split(".").length - 1, 3) * 60}px`;
     newCommentPart.dataset.id = newCommentData.id;
+    newCommentPart.dataset.articleId = newCommentData.articleId;
     newCommentPart.innerHTML = `
                         <div class="comment-user">
                             <img src="${newCommentData.author.image_url}" alt="Commenter avatar" />
@@ -288,6 +289,7 @@ function setupCommentActionPopup(commentElement) {
             },
             body: JSON.stringify({
                 id: commentElement.dataset.id,
+                articleId: commentElement.dataset.articleId,
             }),
         });
 
