@@ -16,11 +16,6 @@ class Article extends Model
         return $this->morphMany(Like::class, 'entity');
     }
 
-    public function likeQuantity()
-    {
-        return $this->morphOne(LikeQuantity::class, 'entity');
-    }
-
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value)->setTimezone('Asia/Ho_Chi_Minh');
@@ -36,5 +31,5 @@ class Article extends Model
         return $this->hasMany(Comment::class, 'article_id');
     }
 
-    protected $fillable = ['user_id', 'title', 'content', 'slug'];
+    protected $fillable = ['user_id', 'title', 'content', 'slug', 'like_quantity', 'comment_quantity'];
 }

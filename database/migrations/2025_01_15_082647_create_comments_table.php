@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('article_id');
             $table->text('content');
+            $table->unsignedBigInteger('like_quantity')->default(0);
+            $table->unsignedBigInteger('child_comment_quantity')->default(0);
             $table->timestamps();
         });
     }

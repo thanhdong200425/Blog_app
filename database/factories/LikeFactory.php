@@ -4,10 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Article;
 use App\Models\Comment;
-use App\Models\Like;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Like>
@@ -22,21 +20,33 @@ class LikeFactory extends Factory
     public function definition(): array
     {
         static $generatedKeys = [];
+        static $userIds = null;
+        static $commentIds = null;
+        static $articleIds = null;
+
+        if ($userIds === null)
+            $userIds = User::pluck('id')->all();
+        if ($commentIds === null)
+            $commentIds = Comment::pluck('id')->all();
+        if ($articleIds === null)
+            $articleIds = Article::pluck('id')->all();
+
         do {
-            $userId = User::all()->random()->id;
-            $entityType = $this->faker->randomElement([
-                Article::class,
-                Comment::class
-            ]);
-            $entity = $entityType::all()->random();
-            $key = $userId."_".$entity->id."_".$entityType;
+            $userId = $this->faker->randomElement($userIds);
+            $entityType = $this->faker->randomElement([Article::class, Comment::class]);
+            $entityId = ($entityType === Article::class)
+                ? $this->faker->randomElement($articleIds)
+                : $this->faker->randomElement($commentIds);
+
+            $key = $userId."_".$entityId."_".$entityType;
         } while (isset($generatedKeys[$key]));
+
         $generatedKeys[$key] = true;
 
         return [
             'user_id' => $userId,
-            'entity_id' => $entity->id,
-            'entity_type' => $entityType
+            'entity_id' => $entityId,
+            'entity_type' => $entityType,
         ];
     }
 }

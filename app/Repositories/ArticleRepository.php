@@ -20,6 +20,8 @@ class ArticleRepository extends BaseRepository implements ArticleRepositoryInter
     }
     public function getAllPaginated($perPage)
     {
+        // dd($this->getAllArticles(perPage: $perPage));
+        // return $this->getAllArticles(perPage: $perPage);
         return $this->model->paginate($perPage);
     }
     public function getBySlug($slug)
@@ -41,9 +43,36 @@ class ArticleRepository extends BaseRepository implements ArticleRepositoryInter
         $article->comments = $this->getArticleComments($article, $userId);
         return $article;
     }
-
+    private function getAllArticles($column = 'articles.id', $type = 'desc', $perPage = null)
+    {
+        $articles = DB::table('articles')
+            ->select(
+                'articles.*',
+                'authors.email',
+                'authors.first_name',
+                'authors.last_name',
+                'authors.image_url'
+            )
+            ->leftJoin('users as authors', 'authors.id', '=', 'articles.user_id')
+            ->orderBy($column, $type);
+        $articles->transform(function ($article) {
+            $this->extractProperties($article, [
+                'author' => [
+                    'id' => 'user_id',
+                    'email' => 'email',
+                    'first_name' => 'first_name',
+                    'last_name' => 'last_name',
+                    'image_url' => 'image_url'
+                ]
+            ]);
+        });
+        if ($perPage !== null)
+            $articles = $articles->paginate($perPage);
+        return $articles;
+    }
     private function extractProperties(&$object, array $mappings)
     {
+        // TODO: Change this function to only use 1 for loop
         foreach ($mappings as $newProperties => $newProperty) {
             $subObject = (object) [];
             foreach ($newProperty as $key => $originalKey) {

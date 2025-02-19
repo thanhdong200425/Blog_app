@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -13,11 +14,6 @@ return new class extends Migration {
         // Update likes table
         Schema::table('likes', function (Blueprint $table) {
             $table->unique(['user_id', 'entity_id', 'entity_type']);
-        });
-
-        // Update likes_quantity table
-        Schema::table('likes_quantity', function (Blueprint $table) {
-            $table->unique(['entity_id', 'entity_type']);
         });
     }
 
@@ -28,10 +24,6 @@ return new class extends Migration {
     {
         Schema::table('likes', function (Blueprint $table) {
             $table->dropUnique('likes_user_id_entity_id_entity_type_id_unique');
-        });
-
-        Schema::table('likes_quantity', function (Blueprint $table) {
-            $table->dropUnique('likes_quantity_entity_id_entity_type_id_unique');
         });
     }
 };

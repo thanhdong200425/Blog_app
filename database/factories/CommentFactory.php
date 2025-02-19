@@ -18,10 +18,17 @@ class CommentFactory extends Factory
      */
     public function definition(): array
     {
+        static $userIds = null, $articleIds = null;
+
+        if ($userIds === null)
+            $userIds = User::pluck('id')->all();
+        if ($articleIds === null)
+            $articleIds = Article::pluck('id')->all();
+
         return [
-            'user_id' => User::all()->random()->id,
-            'article_id' => Article::all()->random()->id,
-            'content' => fake()->paragraph(),
+            'user_id' => $this->faker->randomElement($userIds),
+            'article_id' => $this->faker->randomElement($articleIds),
+            'content' => fake()->paragraph(1),
         ];
     }
 }

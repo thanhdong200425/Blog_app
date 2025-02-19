@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Like;
+use Illuminate\Support\Facades\DB;
 
 class LikeSeeder extends Seeder
 {
@@ -13,6 +14,7 @@ class LikeSeeder extends Seeder
      */
     public function run(): void
     {
-        Like::factory()->count(1000)->create();
+        $data = Like::factory()->count(10000)->make()->toArray();
+        DB::table('likes')->insert($data);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\LikeQuantity;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,20 +22,30 @@ class LikeQuantityFactory extends Factory
     public function definition(): array
     {
         static $generatedKeys = [];
-        do {
-            $entityType = $this->faker->randomElement([
-                Article::class,
-                Comment::class
-            ]);
-            $entityId = $entityType::all()->random()->id;
-            $key = $entityId."_".$entityType;
-        } while (isset($generatedKeys[$key]));
-        $generatedKeys[$key] = true;
+        static $userIds = null;
+        static $commentIds = null;
+        static $articleIds = null;
 
+        if ($userIds === null)
+            $userIds = User::pluck('id')->all();
+        if ($commentIds === null)
+            $commentIds = Comment::pluck('id')->all();
+        if ($articleIds === null)
+            $articleIds = Article::pluck('id')->all();
+
+        do {
+            $userId = $this->faker->randomElement($userIds);
+            $entityType = $this->faker->randomElement([Article::class, Comment::class]);
+            $entityId = $entityType === Article::class ? $this->faker->randomElement($articleIds)
+                : $this->faker->randomElement($commentIds);
+            $key = $userId."_".$entityId."_".$entityType;
+        } while (isset($generatedKeys[$key]));
+
+        $generatedKeys[$key] = true;
         return [
+            'user_id' => $userId,
             'entity_id' => $entityId,
             'entity_type' => $entityType,
-            'quantity' => Like::where('entity_id', $entityId)->where('entity_type', $entityType)->count()
         ];
     }
 }

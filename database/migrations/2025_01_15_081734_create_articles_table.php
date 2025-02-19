@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -16,6 +17,8 @@ return new class extends Migration {
             $table->string('title')->unique();
             $table->string('slug')->unique();
             $table->longText('content');
+            $table->unsignedBigInteger('like_quantity')->default(0);
+            $table->unsignedBigInteger('comment_quantity')->default(0);
             $table->timestamps();
         });
     }

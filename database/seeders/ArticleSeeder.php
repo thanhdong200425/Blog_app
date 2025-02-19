@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Article;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ArticleSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class ArticleSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        Article::factory()->count(1000)->create();
+        $data = Article::factory()->count(10000)->make()->toArray();
+        DB::table('articles')->insert($data);
     }
 }

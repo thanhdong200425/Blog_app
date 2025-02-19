@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Comment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CommentSeeder extends Seeder
 {
@@ -13,6 +14,7 @@ class CommentSeeder extends Seeder
      */
     public function run(): void
     {
-        Comment::factory()->count(1000)->create();
+        $data = Comment::factory()->count(10000)->make()->toArray();
+        DB::table('comments')->insert($data);
     }
 }

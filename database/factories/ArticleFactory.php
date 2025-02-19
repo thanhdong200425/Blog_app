@@ -18,11 +18,16 @@ class ArticleFactory extends Factory
      */
     public function definition(): array
     {
+        static $userIds = null;
+        if ($userIds === null)
+            $userIds = User::pluck('id')->all();
         $title = fake()->sentence();
+        $shortText = fake()->sentence(1);
+        $content = "<p>{$shortText}</p><h2>".fake()->word()."</h2><p>".fake()->text(100)."</p>";
         return [
-            'user_id' => User::all()->random()->id,
+            'user_id' => $this->faker->randomElement($userIds),
             'title' => $title,
-            'content' => fake()->randomHtml(),
+            'content' => $content,
             "slug" => Str::slug($title)
         ];
     }

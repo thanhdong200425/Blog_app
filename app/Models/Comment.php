@@ -17,12 +17,6 @@ class Comment extends Model
     {
         return $this->morphMany(Like::class, 'entity');
     }
-
-    public function likeQuantity(): MorphOne
-    {
-        return $this->morphOne(LikeQuantity::class, 'entity');
-    }
-
     public function parent()
     {
         return $this->belongsTo(Comment::class, 'parent_id');
@@ -58,5 +52,5 @@ class Comment extends Model
         return $this->belongsTo(Article::class);
     }
 
-    protected $fillable = ['user_id', 'article_id', 'content', 'path', 'parent_id'];
+    protected $fillable = ['user_id', 'article_id', 'content', 'path', 'parent_id', 'like_quantity', 'child_comment_quantity'];
 }
